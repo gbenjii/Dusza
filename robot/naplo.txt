@@ -1,0 +1,9 @@
+1 step forward 2
+2 mine here
+3 step forward 2
+4 mine here
+5 step forward 1
+6 mine here
+7 step forward 2
+8 mine here
+EOR
