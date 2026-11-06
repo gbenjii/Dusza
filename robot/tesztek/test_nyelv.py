@@ -11,10 +11,12 @@ from main import csendes_futtatas, main
 from nyelv.elemzo import elemez
 from nyelv.ellenorzo import azonosito_hiba, ertek_hiba
 from nyelv.kiiro import program_sorai, sorszamoz
+from nyelv.ellenorzo import ertek_leptet
 from nyelv.szerkesztes import (
-    BeszurasHelye, BlokkFajta, SzerkesztesiHiba, beszur, beszuras_hiba, torol,
+    BeszurasHelye, BlokkFajta, SzerkesztesiHiba, athelyez, athelyezes_hiba, beszur, beszur_ide,
+    beszuras_hiba, else_ag_valt, torol, vezerlo_magassag,
 )
-from nyelv.tokenizalo import kulcsszo_e, tokenizal_sor
+from nyelv.tokenizalo import TokenFajta, kulcsszo_e, tokenizal_sor
 from nyelv.utasitasok import (
     Ciklus, Elagazas, ErtekFajta, Ertek, Ertekadas, IsThereKif, Muvelet, MuveletKif, NotKif,
 )
@@ -119,6 +121,104 @@ class EllenorzoTeszt(unittest.TestCase):
             self.assertIsNone(ertek_hiba(szoveg), szoveg)
         for szoveg in ("101", "-1", "True", "", "if"):
             self.assertIsNotNone(ertek_hiba(szoveg), szoveg)
+
+
+class TokenFajtaTeszt(unittest.TestCase):
+    def test_fajtak(self):
+        sor = tokenizal_sor("  set x2 to isThere 2", 1)
+        self.assertEqual([t.fajta for t in sor.tokenek_],
+                         [TokenFajta.KULCSSZO, TokenFajta.AZONOSITO, TokenFajta.KULCSSZO,
+                          TokenFajta.KULCSSZO, TokenFajta.SZAM])
+        self.assertEqual(sor.kulcsszo, "set")
+
+    def test_operatorok_es_logikai(self):
+        for szoveg in ("+", "-", "*", "=", "<>", "<", "<=", ">", ">=", "and", "or", "not"):
+            self.assertIs(tokenizal_sor(szoveg, 1).tokenek_[0].fajta, TokenFajta.OPERATOR, szoveg)
+        self.assertIs(tokenizal_sor("true", 1).tokenek_[0].fajta, TokenFajta.LOGIKAI)
+        self.assertIs(tokenizal_sor("True", 1).tokenek_[0].fajta, TokenFajta.AZONOSITO)
+
+    def test_ures_sor_es_crlf(self):
+        sor = tokenizal_sor("    print x\r\n", 3)
+        self.assertEqual((sor.behuzas, sor.tokenek), (4, ["print", "x"]))
+
+
+class VezerloElemzesTeszt(unittest.TestCase):
+    def test_else_a_kulso_ifhez_tartozik(self):
+        program = elemez(["if a", "  while b", "    print 1", "else", "  print 2"])
+        self.assertEqual(len(program), 1)
+        self.assertIsInstance(program[0].igaz_ag[0], Ciklus)
+        self.assertEqual(len(program[0].hamis_ag), 1)
+
+    def test_eltero_behuzasok_blokkonkent(self):
+        sorok = ["while a", "    if b", "     print 1", "    else", "        print 2", "    print 3", "print 4"]
+        program = elemez(sorok)
+        self.assertEqual(program_sorai(program),
+                         ["while a", "  if b", "    print 1", "  else", "    print 2", "  print 3", "print 4"])
+
+    def test_beagyazott_if_else_futas(self):
+        from tesztek.segedlet import naplo
+        sorok_ = sorok("set a to true", "set b to false", "if a", "  if b", "    print 1",
+                       "  else", "    print 2", "else", "  print 3", "print 4")
+        self.assertEqual(naplo(sorok_), ["1", "2", "3", "4", "6", "7 print 2", "10 print 4", "EOR"])
+
+    def test_while_szamlalo(self):
+        from tesztek.segedlet import futtat
+        futtato = futtat(sorok("set i to 0", "set tovabb to true", "while tovabb",
+                               "  set i to i + 1", "  set tovabb to i < 3", "print i"))
+        self.assertEqual(futtato.kimenet, ["3"])
+
+
+class AthelyezesTeszt(unittest.TestCase):
+    def test_athelyezes_torzsbe_es_ki(self):
+        program = elemez(["print 1", "while true", "  print 2", "print 3"])
+        athelyez(program, program[0], program[1].torzs, 1)
+        self.assertEqual(program_sorai(program), ["while true", "  print 2", "  print 1", "print 3"])
+        athelyez(program, program[0].torzs[0], program, 2)
+        self.assertEqual(program_sorai(program), ["while true", "  print 1", "print 3", "print 2"])
+
+    def test_azonos_listan_belul(self):
+        program = elemez(["print 1", "print 2", "print 3"])
+        athelyez(program, program[0], program, 3)
+        self.assertEqual(program_sorai(program), ["print 2", "print 3", "print 1"])
+
+    def test_sajat_torzsbe_nem(self):
+        program = elemez(["while true", "  if true", "    print 1"])
+        self.assertIsNotNone(athelyezes_hiba(program, program[0], program[0].torzs[0].igaz_ag))
+        with self.assertRaises(SzerkesztesiHiba):
+            athelyez(program, program[0], program[0].torzs, 0)
+
+    def test_melyseg_reszfaval(self):
+        program = elemez(["while true", "  if true", "    print 1", "if true", "  print 2"])
+        self.assertEqual(vezerlo_magassag(program[0]), 2)
+        # while(2 szint) az if törzsébe: 1 + 2 = 3 → szabad
+        self.assertIsNone(athelyezes_hiba(program, program[0], program[1].igaz_ag))
+        athelyez(program, program[0], program[1].igaz_ag, 0)
+        kulso = elemez(["while true", "  print 0"])
+        program2 = elemez(["if true", "  while true", "    print 0", "while true", "  if true", "    print 1"])
+        # 2 mély blokk egy 2 mély törzsbe: 4 szint lenne → tiltott
+        self.assertIsNotNone(athelyezes_hiba(program2, program2[0], program2[1].torzs[0].igaz_ag))
+        self.assertEqual(vezerlo_magassag(kulso[0]), 1)
+
+    def test_beszuras_ide(self):
+        program = elemez(["while true", "  if true", "    if true", "      print 1"])
+        belso = program[0].torzs[0].igaz_ag[0].igaz_ag
+        beszur_ide(program, belso, 0, BlokkFajta.LEPES)
+        with self.assertRaises(SzerkesztesiHiba):
+            beszur_ide(program, belso, 0, BlokkFajta.AMIG)
+
+    def test_else_ag_valt(self):
+        program = elemez(["if true", "  print 1"])
+        else_ag_valt(program[0])
+        self.assertEqual(program[0].hamis_ag, [])
+        else_ag_valt(program[0])
+        self.assertIsNone(program[0].hamis_ag)
+
+    def test_ertek_leptet(self):
+        self.assertEqual(ertek_leptet("5", 1), "6")
+        self.assertEqual(ertek_leptet("0", -1), "0")
+        self.assertEqual(ertek_leptet("100", 1), "100")
+        self.assertEqual(ertek_leptet("true", 1), "false")
+        self.assertEqual(ertek_leptet("x", 1), "x")
 
 
 class SzerkesztesTeszt(unittest.TestCase):

@@ -42,3 +42,21 @@ def ertek_hiba(szoveg: str) -> str | None:
             return None
         return f"„{szoveg}”: a szám {LEGKISEBB_SZAM} és {LEGNAGYOBB_SZAM} között lehet."
     return azonosito_hiba(szoveg)
+
+
+def leptetheto_e(szoveg: str) -> bool:
+    """Szám vagy logikai érték: a szerkesztőben −/+ gombbal léptethető."""
+    return szoveg in (IGAZ, HAMIS) or (szoveg.isascii() and szoveg.isdigit())
+
+
+def ertek_leptet(szoveg: str, irany: int) -> str:
+    """A −/+ gomb hatása: számnál ±1 (0..100 között), logikainál true ↔ false.
+
+    Változónévnél nincs mit léptetni, ilyenkor a szöveg változatlan.
+    """
+    if szoveg in (IGAZ, HAMIS):
+        return HAMIS if szoveg == IGAZ else IGAZ
+    if szoveg.isascii() and szoveg.isdigit():
+        uj = min(LEGNAGYOBB_SZAM, max(LEGKISEBB_SZAM, int(szoveg) + irany))
+        return str(uj)
+    return szoveg

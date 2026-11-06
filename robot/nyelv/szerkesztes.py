@@ -159,6 +159,90 @@ def torol(program: list[Utasitas], cel: Utasitas) -> None:
     del poz.lista[poz.index]
 
 
+def vezerlo_magassag(utasitas: Utasitas) -> int:
+    """Hány vezérlőszint van a blokkban önmagával együtt (egyszerű utasításnál 0)."""
+    if not vezerlo_e(utasitas):
+        return 0
+    return 1 + max((vezerlo_magassag(belso) for torzs in torzsek(utasitas) for belso in torzs), default=0)
+
+
+def lista_melyseg(program: list[Utasitas], lista: list[Utasitas], melyseg: int = 0) -> int | None:
+    """Hány vezérlőblokk veszi körül a `lista` törzset (None, ha nincs a fában)."""
+    if lista is program:
+        return melyseg
+    for utasitas in program:
+        for torzs in torzsek(utasitas):
+            if torzs is lista:
+                return melyseg + 1
+            talalat = lista_melyseg(torzs, lista, melyseg + 1)
+            if talalat is not None:
+                return talalat
+    return None
+
+
+def _tartalmazza(utasitas: Utasitas, lista: list[Utasitas]) -> bool:
+    """Igaz, ha `lista` az `utasitas` valamelyik (akár mélyebb) törzse."""
+    for torzs in torzsek(utasitas):
+        if torzs is lista or any(_tartalmazza(belso, lista) for belso in torzs):
+            return True
+    return False
+
+
+def athelyezes_hiba(program: list[Utasitas], mozgatott: Utasitas,
+                    cel_lista: list[Utasitas]) -> str | None:
+    """None, ha a blokk áthúzható a `cel_lista` törzsbe; különben a magyar ok."""
+    if _tartalmazza(mozgatott, cel_lista):
+        return "Egy blokk nem húzható a saját törzsébe."
+    melyseg = lista_melyseg(program, cel_lista)
+    if melyseg is None:
+        return "A célhely nem található a programban."
+    if melyseg + vezerlo_magassag(mozgatott) > MAX_VEZERLO_MELYSEG:
+        return f"Legfeljebb {MAX_VEZERLO_MELYSEG} vezérlőblokk ágyazható egymásba."
+    return None
+
+
+def athelyez(program: list[Utasitas], mozgatott: Utasitas,
+             cel_lista: list[Utasitas], cel_index: int) -> None:
+    """Áthúzás: a blokk (tartalmával együtt) a `cel_lista` `cel_index` helyére kerül."""
+    hiba = athelyezes_hiba(program, mozgatott, cel_lista)
+    if hiba is not None:
+        raise SzerkesztesiHiba(hiba)
+    poz = pozicio_keres(program, mozgatott)
+    if poz is None:
+        raise SzerkesztesiHiba("A mozgatott blokk nem található a programban.")
+    if poz.lista is cel_lista and poz.index < cel_index:
+        cel_index -= 1
+    del poz.lista[poz.index]
+    cel_lista.insert(cel_index, mozgatott)
+
+
+def beszuras_ide_hiba(program: list[Utasitas], cel_lista: list[Utasitas],
+                      fajta: BlokkFajta) -> str | None:
+    """None, ha új `fajta` blokk tehető a `cel_lista` törzsbe."""
+    melyseg = lista_melyseg(program, cel_lista)
+    if melyseg is None:
+        return "A célhely nem található a programban."
+    if fajta in VEZERLO_FAJTAK and melyseg >= MAX_VEZERLO_MELYSEG:
+        return f"Legfeljebb {MAX_VEZERLO_MELYSEG} vezérlőblokk ágyazható egymásba."
+    return None
+
+
+def beszur_ide(program: list[Utasitas], cel_lista: list[Utasitas], cel_index: int,
+               fajta: BlokkFajta) -> Utasitas:
+    """Új blokk a megadott törzs megadott helyére (a palettáról húzáshoz)."""
+    hiba = beszuras_ide_hiba(program, cel_lista, fajta)
+    if hiba is not None:
+        raise SzerkesztesiHiba(hiba)
+    uj = uj_blokk(fajta)
+    cel_lista.insert(cel_index, uj)
+    return uj
+
+
+def else_ag_valt(elagazas: Elagazas) -> None:
+    """if ↔ if-else: else-ág hozzáadása, vagy (tartalmával együtt) eltávolítása."""
+    elagazas.hamis_ag = [] if elagazas.hamis_ag is None else None
+
+
 def vezerlo_melyseg(program: list[Utasitas], cel: Utasitas) -> int:
     """Hány vezérlőblokk tartalmazza a blokkot (0 = legfelső szint)."""
     poz = pozicio_keres(program, cel)
@@ -168,5 +252,6 @@ def vezerlo_melyseg(program: list[Utasitas], cel: Utasitas) -> int:
 __all__ = [
     "MAX_VEZERLO_MELYSEG", "SzerkesztesiHiba", "BeszurasHelye", "BlokkFajta",
     "Pozicio", "uj_blokk", "torzsek", "pozicio_keres", "beszuras_hiba", "beszur",
-    "torol", "vezerlo_melyseg", "vezerlo_e",
+    "torol", "vezerlo_melyseg", "vezerlo_e", "vezerlo_magassag", "lista_melyseg",
+    "athelyezes_hiba", "athelyez", "beszuras_ide_hiba", "beszur_ide", "else_ag_valt",
 ]
