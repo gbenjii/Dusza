@@ -39,6 +39,7 @@ Windowson ez a gond nem jelentkezik, ott a Tk a Windows saját betűkezelését 
 ```
 python main.py BE KI        – IDE, BE betöltése, napló: KI
 python main.py -q BE KI     – felület nélkül: futtatás, napló KI-be, kilépés
+python main.py -m MAPPA     – a mappa minden input_NNN.txt fájlja → output_NNN.txt, egy menetben
 python main.py              – IDE üres programmal (napló: naplo.txt)
 ```
 
@@ -46,7 +47,7 @@ python main.py              – IDE üres programmal (napló: naplo.txt)
 ```
 python -m unittest discover -s tesztek -t .
 ```
-Eredmény: `Ran 87 tests ... OK`
+Eredmény: `Ran 106 tests ... OK`
 
 ## Az exe elkészítése
 ```
@@ -55,17 +56,21 @@ python -m PyInstaller --clean --noconfirm robot.spec
 - A `robot.spec` a customtkinter téma- és betűfájljait is becsomagolja
   (enélkül az exe indításkor hibát adna). Kézzel ugyanez:
   `python -m PyInstaller --onefile --name robot --collect-data customtkinter main.py`
-- Eredmény: `dist\robot.exe` (egyetlen fájl, kb. 11 MB).
+- Eredmény: `dist\robot.exe` (egyetlen fájl, kb. 12 MB). Másold a `robot` mappába is
+  (`copy /y dist\robot.exe robot.exe`), mert a `futtat_mind.bat` először ott keresi.
+- Ellenőrizve customtkinter 5.2.2-vel és 6.0.0-val is; a beadott exe 6.0.0-val készült.
 - Konzolos exe készül (nincs `--noconsole`), hogy a `-q` módban a `print` kimenet látható legyen.
 - A `futtat_mind.bat` először a saját mappájában, aztán a `dist` mappában keresi a `robot.exe`-t; ha nincs meg, a `python main.py`-t használja.
 
-## Tömeges futtatás
+## Tömeges futtatás (verseny tesztek)
 ```
-futtat_mind.bat [mappa]
+futtat_mind.bat MAPPA              – gyors: egyetlen „robot.exe -m MAPPA” hívás
+futtat_mind.bat MAPPA egyenkent    – minden fájl külön „robot.exe -q BE KI” hívással
 ```
-A mappában (alapértelmezés: az aktuális mappa) minden `input_NNN.txt` fájlból `output_NNN.txt` lesz.
-Mért idő: 200 fájl kb. 5,5 perc alatt fut le `robot.exe`-vel. Fájlonként kb. 1,6 s, ennek nagy része az egyfájlos exe kicsomagolása.
-`python main.py`-jal kb. 0,15 s egy fájl.
+A mappa minden `input_NNN.txt` fájljából `output_NNN.txt` lesz, végül a kimenetekből
+`results.zip` készül (a fájlok a zip gyökerében, ahogy a beadás kéri).
+Mért idő (200 fájl, `robot.exe`): **7 s** a `-m` móddal, kb. 5,5 perc egyenként (ott fájlonként
+kb. 1,6 s az egyfájlos exe kicsomagolása). Egy hibás bemenet nem állítja meg a többit.
 
 ## Mappaszerkezet
 ```
@@ -73,16 +78,18 @@ main.py               parancssor, -q mód / IDE indítása
 beolvaso.py           bemeneti fájl → térkép + programsorok (és vissza, mentéshez)
 terkep.py             Mezo, Irany, Robot, Terkep, Vilag (Robot API, felfedezés, szenzor)
 hibak.py              hibakódok és magyar leírásaik
-naplo.py              naplósorok és a naplófájl
-futtato.py            soronkénti végrehajtás generátorral (a -q, az animáció és a nyomkövetés is erre épül)
+naplo.py              naplósorok és a naplófájl (élő írás: futás közben soronként)
+peldaprogramok.py     a Példák menü beépített térképei és programjai
+futtato.py            soronkénti végrehajtás generátorral; előjelzés (SorElott) a töréspontokhoz
 nyelv/tokenizalo.py   tokenizálás a 2.1 pont szerint: behúzás, tokenek fajtával (kulcsszó, azonosító, szám, logikai, operátor)
 nyelv/utasitasok.py   az utasításfa dataclass-ai
 nyelv/elemzo.py       sorok → utasításfa
 nyelv/kiiro.py        utasításfa → szöveg, sorszámozás
 nyelv/ellenorzo.py    azonosító- és értékellenőrzés (szerkesztőhöz)
 nyelv/szerkesztes.py  beszúrás, áthelyezés (húzás), törlés, else-ág, mélységkorlát (GUI nélkül, tesztelhető)
-gui/                  foablak, blokkszerkeszto (paletta, húzás, mezők), kodnezet, szimulator_nezet,
-                      stilus (betűtípusok, színek), tooltip
+gui/                  foablak (futtatás, töréspontok, fájlok, példák), blokkszerkeszto (paletta,
+                      húzás, mezők), kodnezet (színezés, töréspontok), szimulator_nezet
+                      (animáció, térképszerkesztő), stilus (betűtípusok, színek), tooltip
 tesztek/              unittest tesztek
 peldak/               példa bemenetek (001: a feladat példája, 002: bemutató, 003: limit)
 input_video.txt       a bemutató térképe üres programmal

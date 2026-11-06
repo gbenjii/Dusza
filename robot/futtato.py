@@ -2,12 +2,15 @@
 
 A `Futtato.lepesek()` minden végrehajtott forrássor után visszaad egy
 `NaploSor`-t. A -q mód, az animált futás és a nyomkövetés is erre épül.
+`elore_jelez=True` esetén minden sor ELŐTT egy `SorElott` eseményt is ad:
+így a felület tudja, melyik sor következik (töréspont, kiemelés).
 A futtató nem tud a felületről: a kiírást egy opcionális függvény kapja meg.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable, Iterator
+from dataclasses import dataclass
 from enum import Enum
 from functools import partial
 
@@ -35,6 +38,16 @@ class Vegallapot(Enum):
     RENDBEN = "rendben"
     HIBA = "hiba"
     LIMIT = "limit"
+
+
+@dataclass
+class SorElott:
+    """Előjelzés: ez a forrássor következik (még nincs végrehajtva)."""
+
+    sorszam: int
+
+
+Esemeny = SorElott | NaploSor
 
 
 class _Leallas(Exception):
@@ -85,12 +98,13 @@ class Futtato:
     """Egy program egyszeri végrehajtása egy világon."""
 
     def __init__(self, program: list[Utasitas], vilag: Vilag,
-                 kiiro: Callable[[str], None] | None = None) -> None:
+                 kiiro: Callable[[str], None] | None = None, naplo: Naplo | None = None) -> None:
         self.program = program
         self.vilag = vilag
         self.valtozok: dict[str, ErtekTipus] = {}
         self.kimenet: list[str] = []
-        self.naplo = Naplo()
+        self.naplo = naplo if naplo is not None else Naplo()
+        self._elore_jelez = False
         self.feldolgozott = 0
         self.allapot = Vegallapot.FUT
         self.hiba: HibaKod | None = None
@@ -99,8 +113,12 @@ class Futtato:
 
     # ---------- Nyilvános felület ----------
 
-    def lepesek(self) -> Iterator[NaploSor]:
-        """Soronként végrehajtja a programot; minden sor után visszaadja a naplósort."""
+    def lepesek(self, elore_jelez: bool = False) -> Iterator[Esemeny]:
+        """Soronként végrehajtja a programot; minden sor után visszaadja a naplósort.
+
+        `elore_jelez` esetén minden sor előtt egy `SorElott` esemény is jön.
+        """
+        self._elore_jelez = elore_jelez
         try:
             yield from self._blokk(self.program)
             self.allapot = Vegallapot.RENDBEN
@@ -148,6 +166,8 @@ class Futtato:
         """Egy forrássor feldolgozása: naplósor készítése, hiba esetén leállás."""
         if self.feldolgozott >= UTASITAS_LIMIT:
             raise _LimitTullepes()
+        if self._elore_jelez:
+            yield SorElott(sorszam)
         self.feldolgozott += 1
         sor = NaploSor(sorszam)
         try:

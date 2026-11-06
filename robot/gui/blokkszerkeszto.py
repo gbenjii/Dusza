@@ -247,6 +247,9 @@ class Blokkszerkeszto(ctk.CTkFrame):
         self._szerkeszto_mezo: tk.Entry | None = None
         self._huzas: dict | None = None
         self._jelolo: list[int] = []
+        self.torespontok: set[int] = set()
+        """A töréspontos sorok (a főablak állítja be)."""
+        self.torespont_valt: Callable[[int], None] | None = None
 
         ctk.CTkLabel(self, text="Blokkszerkesztő", font=stilus.betu(14, True),
                      text_color=stilus.SZOVEG).pack(anchor="w", padx=12, pady=(8, 0))
@@ -520,8 +523,26 @@ class Blokkszerkeszto(ctk.CTkFrame):
         return self._jobb_szel - melyseg * JOBB_LEPCSO
 
     def _sorszam_rajzol(self, sorszam: int, y: float, magassag: float) -> None:
-        self.vaszon.create_text(BAL_MARGO - 8, y + magassag / 2, anchor="e", text=str(sorszam),
+        ykozep = y + magassag / 2
+        if sorszam in self.torespontok:
+            r = 7
+            self.vaszon.create_oval(BAL_MARGO - 8 - 2 * r - 6, ykozep - r, BAL_MARGO - 8 - 6, ykozep + r,
+                                    fill="#dc2626", outline="#991b1b")
+            self.vaszon.create_text(BAL_MARGO - 8 - r - 6, ykozep, text=str(sorszam), fill="#ffffff",
+                                    font=stilus.tk_mono(8, True))
+            return
+        self.vaszon.create_text(BAL_MARGO - 8, ykozep, anchor="e", text=str(sorszam),
                                 fill="#94a3b8", font=stilus.tk_mono(9))
+
+    def _margo_kattintas(self, x: float, y: float) -> bool:
+        """A sorszámra kattintás töréspontot kapcsol; igaz, ha ez történt."""
+        if x >= BAL_MARGO - 4 or self.torespont_valt is None:
+            return False
+        for sorszam, (felso, also) in self._sor_y.items():
+            if felso <= y <= also:
+                self.torespont_valt(sorszam)
+                return True
+        return False
 
     def _fej_rajzol(self, utasitas: Utasitas, x: float, ykozep: float) -> float:
         return self._elemek_rajzol(utasitas, fej_elemek(utasitas), x, ykozep)
@@ -600,8 +621,10 @@ class Blokkszerkeszto(ctk.CTkFrame):
     def _nyomas(self, esemeny) -> None:
         self.vaszon.focus_set()
         x, y = self._vaszon_pont(esemeny)
-        talalat = self._talalat(x, y)
         self._huzas = None
+        if self._margo_kattintas(x, y):
+            return
+        talalat = self._talalat(x, y)
         if talalat is None:
             self.kijelol(None)
             return

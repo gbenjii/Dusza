@@ -1,7 +1,9 @@
-"""Csak olvasható szöveges kódnézet sorszámokkal, szintaxisszínezéssel és sorkiemeléssel.
+"""Csak olvasható szöveges kódnézet sorszámokkal, szintaxisszínezéssel, töréspontokkal
+és sorkiemeléssel.
 
 A színezés a tokenizáló tokenfajtáit használja (kulcsszó, szám, logikai, operátor).
-Egy sorra kattintva a hozzá tartozó blokk kijelölődik a blokkszerkesztőben.
+A sorszámra kattintva töréspont kapcsolható; a sor többi részére kattintva a hozzá
+tartozó blokk kijelölődik a blokkszerkesztőben.
 """
 
 from __future__ import annotations
@@ -11,11 +13,14 @@ from collections.abc import Callable
 import customtkinter as ctk
 
 from gui import stilus
+from gui.tooltip import Tooltip
 from nyelv.tokenizalo import TokenFajta, tokenizal_sor
 
 SZIN_AKTUALIS = "#fef3c7"
 SZIN_HIBAS = "#fecaca"
 SZIN_KIJELOLT = "#dbeafe"
+SZIN_TORESPONT = "#dc2626"
+SZIN_KOVETKEZO = "#2563eb"
 TOKEN_SZINEK = {
     TokenFajta.KULCSSZO: "#7c3aed",
     TokenFajta.SZAM: "#b45309",
@@ -23,25 +28,33 @@ TOKEN_SZINEK = {
     TokenFajta.OPERATOR: "#be123c",
     TokenFajta.AZONOSITO: "#1e3a8a",
 }
+JEL_TORESPONT = "●"
+JEL_KOVETKEZO = "▶"
+SORSZAM_OSZLOPOK = 5
+"""A sor elején ennyi karakter a „margó” (jel + sorszám); ide kattintva töréspont kapcsol."""
 
 
 class Kodnezet(ctk.CTkFrame):
     """A program szöveges alakja, a blokkokkal mindig szinkronban."""
 
-    def __init__(self, master, sorra_kattintas: Callable[[int], None]) -> None:
+    def __init__(self, master, sorra_kattintas: Callable[[int], None],
+                 torespont_valt: Callable[[int], None]) -> None:
         super().__init__(master, fg_color=stilus.PANEL, corner_radius=10,
                          border_width=1, border_color=stilus.SZEGELY)
         self._sorra_kattintas = sorra_kattintas
-        ctk.CTkLabel(self, text="Szöveges nézet", font=stilus.betu(14, True),
-                     text_color=stilus.SZOVEG).pack(anchor="w", padx=12, pady=(8, 0))
-        ctk.CTkLabel(self, text="csak olvasható – a blokkokkal együtt változik; kattints egy sorra",
-                     font=stilus.betu(10), text_color=stilus.HALVANY).pack(anchor="w", padx=12)
+        self._torespont_valt = torespont_valt
+        self._sorok: list[str] = []
+        self._torespontok: set[int] = set()
+        self._kovetkezo: int | None = None
+        self._fejlec()
         self.doboz = ctk.CTkTextbox(self, font=stilus.mono(13), wrap="none", fg_color="#fbfcfe",
                                     border_width=1, border_color=stilus.SZEGELY, text_color=stilus.SZOVEG)
         self.doboz.pack(fill="both", expand=True, padx=8, pady=8)
         szoveg = self.doboz._textbox
         szoveg.configure(cursor="arrow", spacing1=2, spacing3=2)
         szoveg.tag_configure("sorszam", foreground="#94a3b8")
+        szoveg.tag_configure("torespont", foreground=SZIN_TORESPONT)
+        szoveg.tag_configure("kovetkezo", foreground=SZIN_KOVETKEZO)
         szoveg.tag_configure("kijelolt", background=SZIN_KIJELOLT)
         szoveg.tag_configure("aktualis", background=SZIN_AKTUALIS)
         szoveg.tag_configure("hibas", background=SZIN_HIBAS)
@@ -53,14 +66,35 @@ class Kodnezet(ctk.CTkFrame):
         self._szoveg = szoveg
         self.doboz.configure(state="disabled")
 
-    def megjelenit(self, sorok: list[str]) -> None:
+    def _fejlec(self) -> None:
+        sor = ctk.CTkFrame(self, fg_color="transparent")
+        sor.pack(fill="x", padx=12, pady=(8, 0))
+        ctk.CTkLabel(sor, text="Szöveges nézet", font=stilus.betu(14, True),
+                     text_color=stilus.SZOVEG).pack(side="left")
+        masol = ctk.CTkButton(sor, text="Másolás", width=10, height=24, font=stilus.betu(10),
+                              fg_color="transparent", border_width=1, border_color=stilus.SZEGELY,
+                              text_color=stilus.SZOVEG, hover_color="#e2e8f0", command=self._masolas)
+        masol.pack(side="right")
+        Tooltip(masol, "A teljes forráskód vágólapra másolása.")
+        ctk.CTkLabel(self, text="csak olvasható – a blokkokkal együtt változik.  Sorszámra kattintás: "
+                                "töréspont (●), a futás ott megáll.", font=stilus.betu(10),
+                     text_color=stilus.HALVANY, justify="left", wraplength=330).pack(anchor="w", padx=12)
+
+    # ---------- Megjelenítés ----------
+
+    def megjelenit(self, sorok: list[str], torespontok: set[int] | None = None) -> None:
         """Újraírja a teljes szöveget (tokenenként színezve)."""
+        self._sorok = list(sorok)
+        if torespontok is not None:
+            self._torespontok = set(torespontok)
         szoveg = self._szoveg
         self.doboz.configure(state="normal")
         szoveg.delete("1.0", "end")
         if not sorok:
             szoveg.insert("end", "  (üres program)", "sorszam")
         for index, sor in enumerate(sorok, start=1):
+            jel, cimke = self._jel(index)
+            szoveg.insert("end", jel, cimke)
             szoveg.insert("end", f"{index:>3}  ", "sorszam")
             token_sor = tokenizal_sor(sor, index)
             szoveg.insert("end", " " * token_sor.behuzas)
@@ -70,6 +104,36 @@ class Kodnezet(ctk.CTkFrame):
                 szoveg.insert("end", token.szoveg, token.fajta.name)
             szoveg.insert("end", "\n")
         self.doboz.configure(state="disabled")
+
+    def _jel(self, sorszam: int) -> tuple[str, str]:
+        if sorszam == self._kovetkezo:
+            return JEL_KOVETKEZO, "kovetkezo"
+        if sorszam in self._torespontok:
+            return JEL_TORESPONT, "torespont"
+        return " ", "sorszam"
+
+    def _jel_frissit(self, sorszam: int | None) -> None:
+        if sorszam is None or not 1 <= sorszam <= len(self._sorok):
+            return
+        jel, cimke = self._jel(sorszam)
+        self.doboz.configure(state="normal")
+        self._szoveg.delete(f"{sorszam}.0", f"{sorszam}.1")
+        self._szoveg.insert(f"{sorszam}.0", jel, cimke)
+        self.doboz.configure(state="disabled")
+
+    def torespontok_beallit(self, torespontok: set[int]) -> None:
+        regi = self._torespontok
+        self._torespontok = set(torespontok)
+        for sorszam in regi ^ self._torespontok:
+            self._jel_frissit(sorszam)
+
+    def kovetkezo_jelol(self, sorszam: int | None) -> None:
+        """A következőként végrehajtandó sor jelölése (▶) nyomkövetés közben."""
+        regi, self._kovetkezo = self._kovetkezo, sorszam
+        self._jel_frissit(regi)
+        self._jel_frissit(sorszam)
+        if sorszam is not None:
+            self._szoveg.see(f"{sorszam}.0")
 
     def kiemel(self, sorszam: int | None, hibas: bool = False) -> None:
         """A végrehajtott sor kiemelése (hibánál piros)."""
@@ -89,7 +153,19 @@ class Kodnezet(ctk.CTkFrame):
         if sorszamok:
             self._szoveg.see(f"{sorszamok[0]}.0")
 
+    # ---------- Események ----------
+
     def _kattintas(self, esemeny) -> str:
         index = self._szoveg.index(f"@{esemeny.x},{esemeny.y}")
-        self._sorra_kattintas(int(index.split(".")[0]))
+        sor, oszlop = (int(resz) for resz in index.split("."))
+        if not 1 <= sor <= len(self._sorok):
+            return "break"
+        if oszlop < SORSZAM_OSZLOPOK:
+            self._torespont_valt(sor)
+        else:
+            self._sorra_kattintas(sor)
         return "break"
+
+    def _masolas(self) -> None:
+        self.clipboard_clear()
+        self.clipboard_append("\n".join(self._sorok) + ("\n" if self._sorok else ""))

@@ -1,9 +1,14 @@
-"""Naplósorok összeállítása és a napló fájlba írása."""
+"""Naplósorok összeállítása, és a napló írása – igény szerint élőben, soronként a fájlba.
+
+Élő írásnál minden sor azonnal a fájlba kerül (flush), így a naplófájl
+nyomkövetés közben is megnyitható, és mindig az addigi lépéseket mutatja.
+"""
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TextIO
 
 from hibak import LIMIT_TULLEPES, HibaKod
 
@@ -36,19 +41,36 @@ class NaploSor:
 
 
 class Naplo:
-    """A teljes napló sorai a végrehajtás sorrendjében."""
+    """A napló sorai a végrehajtás sorrendjében; `elo_fajl` esetén élőben is ír."""
 
-    def __init__(self) -> None:
+    def __init__(self, elo_fajl: str | Path | None = None) -> None:
         self.sorok: list[str] = []
+        self._fajl: TextIO | None = None
+        if elo_fajl is not None:
+            self._fajl = open(elo_fajl, "w", encoding="utf-8", newline="\n")
+
+    def _ir(self, sor: str) -> None:
+        self.sorok.append(sor)
+        if self._fajl is not None:
+            self._fajl.write(sor + "\n")
+            self._fajl.flush()
 
     def hozzaad(self, sor: NaploSor) -> None:
-        self.sorok.append(sor.szoveg())
+        self._ir(sor.szoveg())
 
     def lezar_eor(self) -> None:
-        self.sorok.append(FUTAS_VEGE)
+        self._ir(FUTAS_VEGE)
+        self.bezar()
 
     def lezar_limit(self) -> None:
-        self.sorok.append(LIMIT_TULLEPES)
+        self._ir(LIMIT_TULLEPES)
+        self.bezar()
+
+    def bezar(self) -> None:
+        """Lezárja az élő fájlt (megszakított futásnál is)."""
+        if self._fajl is not None:
+            self._fajl.close()
+            self._fajl = None
 
     def szoveg(self) -> str:
         return "".join(sor + "\n" for sor in self.sorok)

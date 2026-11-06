@@ -18,17 +18,20 @@
 | **Összesen** | *…%* | |
 
 ## Hogyan ellenőriztük
-- Minden szabályra és naplózási határesetre unittest készült (`python -m unittest discover -s tesztek -t .`, 73 teszt).
+- Minden szabályra és naplózási határesetre unittest készült (`python -m unittest discover -s tesztek -t .`, 106 teszt).
 - A feladat példáját és a bemutatóprogramot kézzel is végigszámoltuk, és összevetettük a naplóval.
-- A `-q` módot 200 bemeneti fájllal futtattuk (`futtat_mind.bat`), és mértük az időt.
-- Az IDE-t kézzel kipróbáltuk: beszúrás, törlés, mélységkorlát, hibás azonosító, futtatás, nyomkövetés, kézi vezérlés.
+- A teljes feladatleírást (PDF) pontról pontra összevetettük a programmal, a videó forgatókönyvét is.
+- A `-q` és a `-m` módot 200 bemeneti fájllal futtattuk (`futtat_mind.bat`), és mértük az időt.
+- Az IDE-hez szkriptelt füsttesztet írtunk (nyomkövetés, élő napló, töréspont, kézi vezérlés,
+  térképszerkesztés, példák), és képernyőképeken ellenőriztük a megjelenést.
+- A felületet a customtkinter két verziójával (5.2.2 és 6.0.0) is kipróbáltuk.
 - *Kódátnézés: ki, mikor, mit javított.*
 
 ## 5 konkrét eset
-1. **Hibás tesztprogramok javítása.** Az MI eleinte `while i < 499` alakú teszteket írt, de ez nem helyes MineScript (a feltétel csak egyetlen V lehet). A tesztek elbuktak, ebből derült ki. Javítás: segédváltozó (`set c to i < N`, `while c`).
-2. **Utasításkorlát.** Ellenőriztük, hogy pontosan 1000 sornál még `EOR` jön, 1001-nél pedig `INSTRUCTION_COUNT_LIMIT_EXCEEDED`, és utána nincs `EOR`. Erre külön tesztek vannak (3n+4 soros ciklussal).
-3. **Logikai típus Pythonban.** A `bool` az `int` alosztálya, ezért `isinstance` helyett `type(x) is int` kell. Enélkül a `turn by true` nem adna `E_BAD_ARG` hibát.
-4. **Kiértékelési sorrend.** `true or c` nem rövidzáras, ezért `E_UNINITIALIZED` a helyes eredmény. Az `=` és `<>` csak a 2. operandus után ellenőrzi a típusokat. Ezeket tesztekkel rögzítettük.
-5. **GUI-indítási hiba.** A blokkszerkesztő egy belső mezője (`_kovetkezo_y`) a fájlbetöltéskor még nem létezett. A füstteszt (smoke test) mutatta ki, javítás: inicializálás a konstruktorban.
+1. **Utasításkorlát.** Ellenőriztük, hogy pontosan 1000 sornál még `EOR` jön, 1001-nél pedig `INSTRUCTION_COUNT_LIMIT_EXCEEDED`, és utána nincs `EOR`. Erre külön tesztek vannak (3n+4 soros ciklussal).
+2. **Logikai típus Pythonban.** A `bool` az `int` alosztálya, ezért `isinstance` helyett `type(x) is int` kell. Enélkül a `turn by true` nem adna `E_BAD_ARG` hibát.
+3. **Kiértékelési sorrend.** `true or c` nem rövidzáras, ezért `E_UNINITIALIZED` a helyes eredmény. Az `=` és `<>` csak a 2. operandus után ellenőrzi a típusokat. Ezeket tesztekkel rögzítettük.
+4. **Élő napló a videóhoz.** Az első változat csak a futás végén írta ki a naplót. A PDF újraolvasásakor derült ki, hogy a videóban nyomkövetés *közben* is meg kell nyitni a naplófájlt. Javítás: a napló soronként íródik a fájlba (flush), erre külön teszt is van.
+5. **Tömeges futtatás gyorsítása.** A 200 fájl egyenkénti `-q` futtatása 5,5 percig tartott, mert az egyfájlos exe minden indításkor kicsomagolja magát. Az MI javaslatára készült a `-m MAPPA` mód (egy folyamat, minden fájl), így 7 másodperc lett. A kimeneteket bájtra összevetettük az egyenkénti futtatáséval.
 
-*(Cseréljétek a saját tapasztalataitokra, ha eltérnek.)*
+*(A PDF pontosan 5 esetet kér. Cseréljétek a saját tapasztalataitokra, ha eltérnek – pl. Dániel customtkinteres felületének egy esetére.)*

@@ -1,6 +1,9 @@
 @echo off
-rem Minden input_NNN.txt fajlra lefuttatja a robotot -q modban: input_NNN.txt -> output_NNN.txt
-rem Hasznalat: futtat_mind.bat [mappa]   (alapertelmezes: az aktualis mappa)
+rem Verseny tesztek futtatasa: minden input_NNN.txt -> output_NNN.txt, majd results.zip
+rem Hasznalat:  futtat_mind.bat [mappa] [egyenkent]
+rem   mappa      : ahol az input fajlok vannak (alapertelmezes: az aktualis mappa)
+rem   egyenkent  : minden fajlt kulon "robot.exe -q BE KI" hivassal futtat (lassabb);
+rem                enelkul egyetlen "robot.exe -m MAPPA" hivas fut (200+ fajl par masodperc)
 chcp 65001 >nul
 setlocal enabledelayedexpansion
 
@@ -15,14 +18,21 @@ set "MAPPA=%~1"
 if "%MAPPA%"=="" set "MAPPA=."
 pushd "%MAPPA%"
 
-set /a DARAB=0
-for %%F in (input_*.txt) do (
-    set "NEV=%%~nF"
-    set "AZON=!NEV:input_=!"
-    %ROBOT% -q "%%F" "output_!AZON!.txt" >nul
-    set /a DARAB+=1
+if /i "%~2"=="egyenkent" (
+    set /a DARAB=0
+    for %%F in (input_*.txt) do (
+        set "NEV=%%~nF"
+        set "AZON=!NEV:input_=!"
+        %ROBOT% -q "%%F" "output_!AZON!.txt" >nul
+        set /a DARAB+=1
+    )
+    echo Kesz: !DARAB! fajl lefuttatva.
+) else (
+    %ROBOT% -m .
 )
 
+if exist results.zip del results.zip
+powershell -NoProfile -Command "Compress-Archive -Path 'output_*.txt' -DestinationPath 'results.zip'" && echo results.zip elkeszult: %CD%\results.zip
+
 popd
-echo Kesz: !DARAB! fajl lefuttatva.
 endlocal
