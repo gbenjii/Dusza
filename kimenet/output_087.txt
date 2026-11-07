@@ -1,0 +1,4 @@
+1 step forward 0
+2 print 28
+3 mine here E_NO_GOLD
+EOR

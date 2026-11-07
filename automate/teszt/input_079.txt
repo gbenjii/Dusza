@@ -1,0 +1,16 @@
+5 9
+..#..##..
+#..#.....
+.#.##.#.#
+.##..#@#.
+>....#...
+mine here
+set printx to 5
+set Arany to 100 < printx
+print true
+if true
+  set iffy to printx
+  set Arany to true
+  if false
+   mine here
+   step forward 0

@@ -1,0 +1,11 @@
+1 2
+>.
+set n to 100 * 3
+set n to n + 31
+set i to 0
+set c to i < n
+print n
+print n
+while c
+  set i to i + 1
+  set c to i < n

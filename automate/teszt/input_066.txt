@@ -1,0 +1,12 @@
+5 10
+<....@@#@.
+....@#....
+..#.@....#
+..........
+..........
+step forward 2
+set orr to 32 >= 32
+if iffy
+    mine here
+turn by 3
+set here2 to not orr

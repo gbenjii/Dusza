@@ -1,0 +1,13 @@
+1 isThere 2 false
+2
+7
+13
+14 print true
+15 isThere 1 false
+16
+26
+29
+30 step forward 0
+31
+33 E_UNINITIALIZED
+EOR

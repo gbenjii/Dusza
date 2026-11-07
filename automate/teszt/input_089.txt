@@ -1,0 +1,38 @@
+12 1
+.
+.
+.
+.
+@
+.
+#
+^
+.
+.
+.
+#
+turn by 5
+set notfal to 84 <= 8
+set here2 to 80
+set megy to isThere 0
+while megy
+  mine here
+  set megy to isThere 0
+set a to 14 - here2
+print 80
+set fal to isThere 0
+while fal
+  print false
+  step forward a
+  set printx to fal = false
+  set fal to isThere 2
+if printx
+  step forward a
+else
+  if notfal
+   step forward here2
+  step forward a
+turn by 0
+step forward 1
+turn by 5
+turn by a

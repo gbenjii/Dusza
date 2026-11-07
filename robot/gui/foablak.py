@@ -22,6 +22,7 @@ from beolvaso import Bemenet, beolvas_fajl, beolvas_szoveg, bemenet_szoveg
 from futtato import UTASITAS_LIMIT, Futtato, SorElott, Vegallapot
 from gui import stilus
 from gui.blokkszerkeszto import Blokkszerkeszto
+from gui.folyo_keret import FolyoKeret
 from gui.kodnezet import Kodnezet
 from gui.szimulator_nezet import SzimulatorNezet
 from gui.tooltip import Tooltip
@@ -226,52 +227,67 @@ class Foablak(ctk.CTk):
         return gomb
 
     def _eszkoztar(self) -> None:
-        sav = ctk.CTkFrame(self, fg_color=stilus.PANEL, corner_radius=0, height=56)
+        """Az eszközsor sortörő: keskeny ablakban a gombok új sorba kerülnek, nem vágódnak le."""
+        sav = ctk.CTkFrame(self, fg_color=stilus.PANEL, corner_radius=0)
         sav.pack(side="top", fill="x")
-        logo = tk.Canvas(sav, width=30, height=30, background=stilus.PANEL, highlightthickness=0)
+        sor = FolyoKeret(sav, hatter=stilus.PANEL, vizszintes_koz=6, fuggoleges_koz=6)
+        sor.pack(fill="x", padx=12, pady=10)
+        cim = tk.Frame(sor, background=stilus.PANEL)
+        logo = tk.Canvas(cim, width=30, height=30, background=stilus.PANEL, highlightthickness=0)
         logo.create_oval(3, 3, 27, 27, fill="#dc2626", outline="#7f1d1d", width=2)
         logo.create_polygon(26, 15, 15, 8, 15, 22, fill="#fde047", outline="#7f1d1d", width=2)
-        logo.pack(side="left", padx=(12, 6))
-        ctk.CTkLabel(sav, text="MineScript IDE", font=stilus.betu(16, True),
-                     text_color=stilus.SZOVEG).pack(side="left", padx=(0, 14), pady=10)
-        for szoveg, parancs, sugo in (
+        logo.pack(side="left", padx=(0, 6))
+        ctk.CTkLabel(cim, text="MineScript IDE", font=stilus.betu(16, True),
+                     text_color=stilus.SZOVEG).pack(side="left")
+        sor.hozzaad(cim)
+        for index, (szoveg, parancs, sugo) in enumerate((
                 ("Új", self._uj_program, "Új, üres program (a térkép megmarad). Ctrl+N"),
                 ("Megnyitás", self._megnyitas, "Bemeneti fájl (térkép + program) betöltése. Ctrl+O"),
                 ("Mentés", self._mentes, "A térkép és a program mentése a bemeneti fájl formátumában. Ctrl+S"),
                 ("Példák ▾", self._peldak_menu, "Beépített példák: térkép + program egy kattintással."),
-                ("Napló helye", self._naplo_hely, "Hová kerüljön a futás naplója.")):
-            gomb = self._atlatszo_gomb(sav, szoveg, parancs, sugo)
-            gomb.pack(side="left", padx=3)
+                ("Napló helye", self._naplo_hely, "Hová kerüljön a futás naplója."))):
+            gomb = self._atlatszo_gomb(sor, szoveg, parancs, sugo)
+            sor.hozzaad(gomb, plusz_koz=10 if index == 0 else 0)
             if szoveg.startswith("Példák"):
                 self._peldak_gomb = gomb
-        ctk.CTkFrame(sav, width=2, height=30, fg_color=stilus.SZEGELY).pack(side="left", padx=10)
-        self.futtat_gomb = self._gomb(sav, "▶  Futtatás (F5)", self.futtatas, stilus.GOMB_FUTTAT,
+        sor.hozzaad(ctk.CTkFrame(sor, width=2, height=30, fg_color=stilus.SZEGELY), plusz_koz=4)
+        self.futtat_gomb = self._gomb(sor, "▶  Futtatás (F5)", self.futtatas, stilus.GOMB_FUTTAT,
                                       "Lassított, animált futtatás az elejétől (térkép és robot visszaáll). "
-                                      "Töréspontnál megállva: animált folytatás.", szel=170)
-        self.lepes_gomb = self._gomb(sav, "▷  Lépésenként (F10)", self.nyomkovetes, stilus.GOMB_LEPES,
+                                      "Töréspontnál megállva: animált folytatás.", szel=150)
+        self.lepes_gomb = self._gomb(sor, "▷  Lépésenként (F10)", self.nyomkovetes, stilus.GOMB_LEPES,
                                      "Nyomkövetés: a ▶ jel a következő sort mutatja, minden kattintás egy "
-                                     "sort hajt végre. Animált futás közben szünetet tart.", szel=200)
-        self.vegig_gomb = self._gomb(sav, "▶▶  Végig (F8)", self.vegig, ("#7c3aed", "#6d28d9"),
+                                     "sort hajt végre. Animált futás közben szünetet tart.", szel=180)
+        self.vegig_gomb = self._gomb(sor, "▶▶  Végig (F8)", self.vegig, ("#7c3aed", "#6d28d9"),
                                      "Azonnali futás a végéig vagy a következő töréspontig "
                                      "(nyomkövetés közben: folytatás).")
-        self.leallit_gomb = self._gomb(sav, "■  Leállítás (Esc)", self.leallitas, stilus.GOMB_ALLJ,
+        self.leallit_gomb = self._gomb(sor, "■  Leállítás (Esc)", self.leallitas, stilus.GOMB_ALLJ,
                                        "Az aktuális futás leállítása.")
-        for gomb in (self.futtat_gomb, self.lepes_gomb, self.vegig_gomb, self.leallit_gomb):
-            gomb.pack(side="left", padx=3)
-        sebesseg = ctk.CTkFrame(sav, fg_color="transparent")
-        sebesseg.pack(side="left", padx=(14, 0))
-        ctk.CTkLabel(sebesseg, text="Animáció:  lassú", font=stilus.betu(11),
+        for index, gomb in enumerate((self.futtat_gomb, self.lepes_gomb, self.vegig_gomb, self.leallit_gomb)):
+            sor.hozzaad(gomb, plusz_koz=4 if index == 0 else 0)
+        sebesseg = ctk.CTkFrame(sor, fg_color="transparent")
+        ctk.CTkLabel(sebesseg, text="lassú", font=stilus.betu(11),
                      text_color=stilus.HALVANY).pack(side="left")
-        self.sebesseg = ctk.CTkSlider(sebesseg, from_=KESLELTETES_MIN_MS, to=KESLELTETES_MAX_MS, width=130)
+        self.sebesseg = ctk.CTkSlider(sebesseg, from_=KESLELTETES_MIN_MS, to=KESLELTETES_MAX_MS, width=110)
         self.sebesseg.set(KESLELTETES_MAX_MS + KESLELTETES_MIN_MS - KESLELTETES_ALAP_MS)
-        self.sebesseg.pack(side="left", padx=6)
+        self.sebesseg.pack(side="left", padx=4)
         ctk.CTkLabel(sebesseg, text="gyors", font=stilus.betu(11),
                      text_color=stilus.HALVANY).pack(side="left")
-        for szoveg, tartalom, cim in (("Billentyűk", BILLENTYUK, "Billentyűparancsok"),
-                                      ("Nyelv", NYELV_SUGO, "A MineScript nyelv"),
-                                      ("? Súgó (F1)", GYORS_SUGO, "Súgó")):
-            gomb = self._atlatszo_gomb(sav, szoveg, lambda t=tartalom, c=cim: self._sugo(c, t), cim)
-            gomb.pack(side="right", padx=(0, 8))
+        Tooltip(self.sebesseg, "Az animált futtatás sebessége.")
+        sor.hozzaad(sebesseg, plusz_koz=10)
+        sugo = self._atlatszo_gomb(sor, "Súgó ▾", self._sugo_menu,
+                                   "Súgó (F1), a MineScript nyelv és a billentyűparancsok.")
+        self._sugo_gomb = sugo
+        sor.hozzaad(sugo, plusz_koz=10)
+
+    def _sugo_menu(self) -> None:
+        """A súgók egy legördülő menüben (kevesebb hely az eszközsorban)."""
+        menu = tk.Menu(self, tearoff=False, font=stilus.tk_betu(10))
+        for szoveg, tartalom, cim in (("Súgó (F1)", GYORS_SUGO, "Súgó"),
+                                      ("A MineScript nyelv", NYELV_SUGO, "A MineScript nyelv"),
+                                      ("Billentyűparancsok", BILLENTYUK, "Billentyűparancsok")):
+            menu.add_command(label=szoveg, command=lambda t=tartalom, c=cim: self._sugo(c, t))
+        gomb = self._sugo_gomb
+        menu.tk_popup(gomb.winfo_rootx(), gomb.winfo_rooty() + gomb.winfo_height())
 
     def _allapotsor(self) -> None:
         self.allapot_sav = ctk.CTkFrame(self, fg_color=stilus.SZIN_INFO, corner_radius=0, height=34)
@@ -422,7 +438,7 @@ class Foablak(ctk.CTk):
         doboz.configure(state="normal")
         belso.delete("1.0", "end")
         if self.futtato is None:
-            belso.insert("end", "Futtatás / nyomkövetés közben itt látszanak\na változók aktuális értékei.", "ures")
+            belso.insert("end", "Futtatás / nyomkövetés\nközben itt látszanak\na változók értékei.", "ures")
             self.szamlalo_cimke.configure(text="")
             self.limit_sav.set(0)
             doboz.configure(state="disabled")

@@ -182,9 +182,14 @@ class Vilag:
             self.lepesszam += 1
 
     def fordul(self, negyedfordulatok: int) -> None:
-        """Balra fordul a megadott számú negyedfordulattal."""
-        self.robot.irany = self.robot.irany.balra(negyedfordulatok)
-        self.fordulasszam += 1
+        """Balra fordul a megadott számú negyedfordulattal.
+
+        A statisztikában csak a valódi irányváltás számít (a turn by 0 / 4 nem fordulás).
+        """
+        regi_irany = self.robot.irany
+        self.robot.irany = regi_irany.balra(negyedfordulatok)
+        if self.robot.irany is not regi_irany:
+            self.fordulasszam += 1
 
     def banyasz(self) -> None:
         """Kibányássza az aranyat a robot mezőjén, különben E_NO_GOLD."""

@@ -1,0 +1,13 @@
+6 3
+..@
+@.@
+.@@
+...
+@.<
+@..
+set setx to 19
+turn by setx
+turn by 1
+turn by setx
+set x to true or true
+step forward setx

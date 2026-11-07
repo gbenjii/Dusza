@@ -1,0 +1,14 @@
+1 2
+>.
+set i to 0
+set c to true
+while c
+  if c
+    if true
+      set i to i + 1
+    else
+      print 99
+  else
+    print 98
+  set c to i < 2
+print i

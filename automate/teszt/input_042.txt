@@ -1,0 +1,4 @@
+1 2
+>.
+set w to 0 - 2
+set r to isThere w

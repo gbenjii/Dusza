@@ -1,0 +1,4 @@
+1 2
+>.
+if van
+  print 1

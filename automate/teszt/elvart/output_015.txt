@@ -1,0 +1,37 @@
+1
+2
+3
+5
+6
+7
+8
+9
+10 print 1
+16
+17
+18 turn by 4
+6
+7
+8
+9
+10 print 2
+16
+17
+18 turn by 4
+6
+7
+8
+9
+11
+12 step forward 3
+13 mine here
+14 print 100
+15
+16
+17
+19
+20 print 7
+21
+23 print 9
+24 step forward 1 E_BEDROCK_HIT
+EOR

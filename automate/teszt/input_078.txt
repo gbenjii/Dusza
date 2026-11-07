@@ -1,0 +1,16 @@
+5 14
+..v..........#
+..#.......@..#
+.#........#...
+...@...#@.....
+...#....##....
+step forward 1
+turn by 2
+set arany to 96
+set iffy to 30
+set arany to isThere 1
+while false
+    set printx to 47 - iffy
+    mine here
+set a to 26 - iffy
+step forward 0

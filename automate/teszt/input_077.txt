@@ -1,0 +1,10 @@
+5 10
+.....@@#^#
+.#...@.##.
+.#.@#@#@#.
+#.@@..##..
+..#..@....
+set orr to 71 <= 60
+step forward 2
+step forward a
+step forward 0

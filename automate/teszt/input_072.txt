@@ -1,0 +1,23 @@
+4 8
+........
+........
+...@....
+..>.....
+set by1 to isThere 1
+set printx to 91
+if true
+  print 66
+  print 68
+  if by1
+   turn by 3
+set Arany to by1
+turn by printx
+turn by printx
+set arany to isThere 1
+while arany
+    if false
+      if true
+        step forward 2
+        set endif to Arany
+    step forward printx
+    set arany to isThere 2

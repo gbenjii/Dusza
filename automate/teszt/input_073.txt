@@ -1,0 +1,65 @@
+9 1
+<
+.
+.
+@
+@
+.
+.
+.
+.
+set fal to isThere 2
+while fal
+  set iffy to 17
+  set fal to isThere 1
+set by1 to iffy
+turn by 2
+if true
+    set orr to false <> arany
+    set tox to by1
+    set orr to not orr
+else
+    print 3
+    set fal to isThere 0
+    while fal
+        set orr to not orr
+        turn by setx
+        set fal to isThere 0
+set megy to isThere 0
+while megy
+  mine here
+  set megy to isThere 1
+turn by 0
+set arany to isThere 2
+while arany
+ step forward iffy
+ if true
+     turn by tox
+     set endif to 49 - tox
+     set orr to true
+ set arany to isThere 1
+set whilee to 75 < by1
+set megy to isThere 2
+while megy
+    if orr
+      set megy to isThere 0
+      while megy
+        set here2 to tox
+        set megy to isThere 1
+    else
+      turn by 0
+    set iffy to iffy
+    set arany to isThere 1
+    while arany
+      set x to false
+      set endif to x * 4
+      set arany to isThere 1
+    set megy to isThere 1
+if true
+ step forward true
+ print true
+ set setx to 27 * 9
+else
+ turn by by1
+set setx to not whilee
+turn by 5

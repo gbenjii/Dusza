@@ -1,0 +1,38 @@
+15 8
+###@....
+..#.....
+...@.###
+....#...
+..@#....
+.#.@.#.#
+.@...@@#
+##@.@.#.
+.#.@#.#.
+@...#...
+...#....
+.....#@#
+........
+@.#..@..
+.#.#.@<@
+set arany to isThere 2
+print 74
+step forward 1
+set printx to isThere 2
+step forward 0
+step forward 2
+print true
+if printx
+    step forward 1
+    turn by 1
+    print printx
+else
+    if arany
+     set here2 to 38
+    mine here
+    set notfal to printx
+set here2 to 99 - here2
+turn by 1
+if false
+    print 42
+    turn by here2
+step forward 0

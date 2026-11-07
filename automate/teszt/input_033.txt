@@ -1,0 +1,22 @@
+1 2
+>.
+set t to true
+set f to false
+set a to t = f
+set b to t <> f
+set c to f = false
+set d to 0 = 0
+set e to 7 <> 7
+set g to 0 <= 0
+set h to 100 >= 100
+set i to 100 > 100
+set j to 0 < 0
+print a
+print b
+print c
+print d
+print e
+print g
+print h
+print i
+print j

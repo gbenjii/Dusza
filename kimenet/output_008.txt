@@ -1,0 +1,9 @@
+1
+2
+3
+4
+5 print 100
+6 print true
+7
+8 print 0
+EOR

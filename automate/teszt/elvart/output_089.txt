@@ -1,0 +1,11 @@
+1 turn by 5
+2
+3
+4 isThere 0 false
+5
+8
+9 print 80
+10 isThere 0 false
+11
+16 E_UNINITIALIZED
+EOR

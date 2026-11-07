@@ -1,0 +1,32 @@
+14 12
+........@..#
+............
+......@..##.
+.@.#......##
+#..##.....#.
+........@...
+#.......##.^
+.....#.@#.#.
+..@...#@....
+....#.#.##..
+#.....##.#..
+.....##.##..
+.@.#.#...#..
+......#.....
+set a to false
+mine here
+if false
+  if false
+   mine here
+else
+  turn by 3
+  if false
+   if a
+    step forward 1
+    step forward 2
+   else
+    print false
+  step forward 0
+turn by 5
+print 88
+set arany to 9 < 85

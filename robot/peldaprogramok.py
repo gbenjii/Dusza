@@ -32,6 +32,51 @@ while megy
 print count
 """
 
+PROGRAM_PALYA_BEJARAS = """step forward 2
+mine here
+turn by 1
+step forward 2
+turn by 3
+step forward 2
+mine here
+step forward 1
+turn by 3
+step forward 2
+mine here
+turn by 1
+step forward 2
+mine here
+step forward 1
+turn by 1
+step forward 2
+turn by 3
+step forward 1
+mine here
+turn by 2
+step forward 1
+turn by 1
+step forward 2
+turn by 3
+step forward 1
+turn by 1
+step forward 2
+mine here
+turn by 3
+step forward 2
+turn by 3
+step forward 2
+turn by 1
+step forward 1
+mine here
+step forward 2
+turn by 1
+step forward 2
+turn by 3
+step forward 1
+mine here
+"""
+"""Az input_video.txt pályájának bejárása: mind a 8 aranyrög kibányászása, hiba nélkül."""
+
 TERKEP_KORBE = (
     "5 8\n"
     "@..@...@\n"
@@ -102,6 +147,10 @@ PELDAK: tuple[Pelda, ...] = (
     Pelda("Bemutató térkép (üres program)",
           "A videó forgatókönyvének térképe, üres programmal – építsd fel blokkokból!",
           TERKEP_VIDEO),
+    Pelda("Bemutató térkép: mind a 8 arany",
+          "Az input_video.txt pályája egy végigjárt útvonallal: a robot bejárja a térképet, "
+          "és mind a 8 aranyrögöt kibányássza (42 sor, hiba nélkül).",
+          TERKEP_VIDEO + PROGRAM_PALYA_BEJARAS),
     Pelda("Aranygyűjtés egyenesen",
           "A feladatleírás programja: előre halad a falig, közben minden aranyat kibányász.",
           TERKEP_VIDEO + PROGRAM_AGYUJTO),
@@ -115,6 +164,7 @@ PELDAK: tuple[Pelda, ...] = (
           "Megfordul és falnak megy: a futás hibakóddal leáll.",
           "2 4\n.>@.\n....\n" + PROGRAM_HIBA),
     Pelda("A feladatleírás naplópéldája",
-          "A 4. fejezet példája: a napló a „8 isThere 3 E_BAD_ARG” sorral és EOR-ral zárul.",
-          "3 15\n....@..........\n.#############.\n.......@...>...\n" + PROGRAM_FELADAT),
+          "A 4. fejezet példája a bemutató (input_video.txt) térképén: a robot előtt nincs arany, "
+          "így a napló a feladatleírással egyezően a „8 isThere 3 E_BAD_ARG” sorral és EOR-ral zárul.",
+          TERKEP_VIDEO + PROGRAM_FELADAT),
 )

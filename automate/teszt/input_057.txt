@@ -1,0 +1,7 @@
+1 3
+>..
+set m to true
+while m
+  step forward 1
+  set m to isThere 0
+  set q to m + 1

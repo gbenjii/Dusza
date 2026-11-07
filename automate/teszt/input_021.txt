@@ -1,0 +1,4 @@
+1 2
+>.
+set a to 1
+set x to a = true

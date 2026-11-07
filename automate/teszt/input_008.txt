@@ -1,0 +1,10 @@
+1 2
+>.
+set a1b2 to 7
+set Z9 to 100
+set count to a1b2 + 93
+set Count to count = Z9
+print count
+print Count
+set q1 to Z9 - count
+print q1

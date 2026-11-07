@@ -1,0 +1,65 @@
+4 3
+..@
+v.@
+.@.
+.@@
+set arany to 14
+if true
+    set megy to isThere 1
+    while megy
+     set megy to isThere 1
+     while megy
+      set arany to arany - arany
+      turn by arany
+      set x to 97
+      set megy to isThere 1
+     set megy to isThere 2
+step forward x
+step forward 1
+if megy
+ step forward 1
+ set endif to not megy
+else
+ turn by 0
+ mine here
+ if false
+   if true
+       print 79
+       turn by arany
+ else
+   step forward x
+turn by 3
+if megy
+  set iffy to 74 - arany
+  turn by arany
+else
+  step forward 1
+  if endif
+    step forward arany
+    turn by 5
+    set here2 to x - x
+set endif to not megy
+set fal to isThere 0
+while fal
+  step forward 2
+  print 50
+  if megy
+      set notfal to false <> endif
+      step forward 0
+  else
+      set tox to true
+      if tox
+        print megy
+      else
+        step forward 1
+        step forward arany
+      set by1 to 43 - arany
+  set fal to isThere 0
+turn by 4
+turn by here2
+if megy
+  step forward here2
+  if notfal
+      turn by 1
+      turn by 1
+      step forward iffy

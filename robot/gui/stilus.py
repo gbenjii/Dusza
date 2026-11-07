@@ -10,6 +10,11 @@ Linuxon a Tk csak akkor látja a rendszer betűtípusait, ha Xft-vel fordított�
 A uv / python-build-standalone Pythonok Tk-ja Xft nélküli („x11” fontrendszer):
 ilyenkor csak a régi X11-betűk érhetők el, ezek közül a helvetica és a courier
 a legjobb. Ezt az `XFT_HIANYZIK` jelzi, a főablak figyelmeztet is rá.
+
+A customtkinter Linuxon a gombok / keretek sarkait egy saját betűtípus karaktereivel
+rajzolja („font_shapes”). Xft nélkül ez a betű nem tölthető be, és a sarkok helyén
+recés pixelminta jelenik meg, ezért ilyenkor a sokszögből rajzolt sarkokra váltunk
+(a „circle_shapes” mód a fülválasztó gombsor hátterét rossz szélességgel rajzolná).
 """
 
 from __future__ import annotations
@@ -18,6 +23,7 @@ import tkinter as tk
 import tkinter.font as tkfont
 
 import customtkinter as ctk
+from customtkinter.windows.widgets.core_rendering import DrawEngine
 
 _SANS_JELOLTEK = ("Segoe UI", "DejaVu Sans", "Noto Sans", "Ubuntu", "Cantarell",
                   "Liberation Sans", "Arial", "Helvetica", "Nimbus Sans L")
@@ -28,8 +34,8 @@ SANS = "TkDefaultFont"
 MONO = "TkFixedFont"
 XFT_HIANYZIK = False
 """Igaz, ha a Tk Linuxon Xft nélkül fut (csak régi X11-betűk érhetők el)."""
-XFT_UZENET = ("Figyelem: ennek a Pythonnak a Tk-ja nem támogatja a rendszer betűtípusait (Xft), "
-              "ezért a betűk elnagyoltak lehetnek. Megoldás: rendszer-Python (lásd build.md).")
+XFT_UZENET = ("Figyelem: ennek a Pythonnak a Tk-ja nem támogatja a rendszer betűtípusait (Xft), és a gépen "
+              "nincs másik ilyen Python. Telepítsd: sudo apt install python3-tk – utána automatikusan azzal indul.")
 
 # ---- Színek (világos téma; a blokkszínek a feladatleírás ábráit követik) ----
 HATTER = "#eef1f6"
@@ -72,6 +78,8 @@ def beallit(gyoker: tk.Misc) -> None:
     """A gyökérablak létrehozása után kell hívni (a családok csak ekkor kérdezhetők le)."""
     global SANS, MONO, XFT_HIANYZIK
     XFT_HIANYZIK = _xft_hianyzik(gyoker)
+    if XFT_HIANYZIK:
+        DrawEngine.preferred_drawing_method = "polygon_shapes"
     SANS = _elso_elerheto(_SANS_JELOLTEK, "TkDefaultFont")
     MONO = _elso_elerheto(_MONO_JELOLTEK, "TkFixedFont")
     for nev in ("TkDefaultFont", "TkTextFont", "TkMenuFont", "TkHeadingFont", "TkTooltipFont"):
@@ -116,3 +124,14 @@ def tk_betu(meret: int = 10, vastag: bool = False) -> tuple:
 
 def tk_mono(meret: int = 10, vastag: bool = False) -> tuple:
     return (MONO, meret, "bold") if vastag else (MONO, meret)
+
+
+def tordel(cimke: ctk.CTkLabel, keret: tk.Misc, levonas: int = 24) -> None:
+    """A felirat sortörése mindig a keret aktuális szélességéhez igazodik (ne vágódjon le).
+
+    A customtkinter a wraplength-et még egyszer skálázza, ezért visszaosztjuk.
+    """
+    def igazit(esemeny) -> None:
+        skala = cimke._get_widget_scaling()
+        cimke.configure(wraplength=max(esemeny.width / skala - levonas, 80))
+    keret.bind("<Configure>", igazit, add="+")

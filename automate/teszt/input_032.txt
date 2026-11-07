@@ -1,0 +1,13 @@
+1 2
+>.
+set a to 100
+set b to a * a
+set c to b * b
+set d to 0 - c
+print d
+set e to d - d
+print e
+set f to d < e
+print f
+set g to d * d
+print g

@@ -1,0 +1,4 @@
+1 isThere 2 false
+2
+5 E_UNINITIALIZED
+EOR

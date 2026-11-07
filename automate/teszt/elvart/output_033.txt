@@ -1,0 +1,21 @@
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12 print false
+13 print true
+14 print true
+15 print true
+16 print false
+17 print true
+18 print true
+19 print false
+20 print false
+EOR

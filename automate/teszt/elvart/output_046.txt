@@ -1,0 +1,8 @@
+1 step forward 1
+2 turn by 2
+3 isThere 0 true
+4 print true
+5 step forward 1
+6 isThere 0 true
+7 print true
+EOR

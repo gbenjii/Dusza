@@ -1,0 +1,1001 @@
+1
+2 turn by 0
+3
+4 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+6
+7
+8
+9 isThere 1 true
+5
+INSTRUCTION_COUNT_LIMIT_EXCEEDED

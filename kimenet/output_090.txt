@@ -1,0 +1,4 @@
+1 isThere 2 true
+2 turn by 3
+3 step forward 1 E_BEDROCK_HIT
+EOR

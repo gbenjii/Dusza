@@ -1,0 +1,36 @@
+8 4
+.##@
+#^..
+#...
+##..
+@@..
+#..@
+....
+.#..
+step forward 1
+set tox to 90
+turn by tox
+set fal to isThere 0
+while fal
+  print tox
+  set Arany to 97
+  set arany to isThere 0
+  while arany
+    if arany
+        set a to isThere 2
+    else
+        turn by 0
+    print 36
+    set arany to isThere 1
+  set fal to isThere 0
+turn by 1
+step forward 1
+step forward Arany
+step forward tox
+if false
+  turn by tox
+else
+  set arany to not arany
+  step forward tox
+  step forward tox
+step forward tox

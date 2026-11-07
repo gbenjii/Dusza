@@ -1,0 +1,9 @@
+1
+2
+3 step forward 1
+4 isThere 0 true
+2
+3 step forward 1
+4 isThere 0 false
+2
+EOR

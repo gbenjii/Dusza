@@ -1,0 +1,8 @@
+1 2
+>#
+print true
+print false
+print 0
+set a to isThere 0
+set b to isThere 1
+set c to isThere 2

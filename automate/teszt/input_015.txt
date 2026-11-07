@@ -1,0 +1,26 @@
+1 4
+>..@
+set k to 0
+set f to false
+if f
+  print 1
+else
+  while true
+    set k to k + 1
+    set v to k < 3
+    if v
+      print k
+    else
+      step forward 3
+      mine here
+      print 100
+      set f to true
+    set w to not f
+    if w
+      turn by 4
+    else
+      print 7
+      while false
+        print 8
+      print 9
+      step forward 1

@@ -1,0 +1,7 @@
+1 2
+>.
+set b to true
+set b to false
+set b to not b
+print b
+set b to 0

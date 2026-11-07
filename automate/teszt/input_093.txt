@@ -1,0 +1,61 @@
+15 13
+.@.......@.#@
+.......>...@.
+...@.@...#..@
+@........@@..
+...#.@...#...
+..@..@.#@..@.
+.........@...
+.........#@..
+.@#..@@..@@@.
+@#.@....@....
+..@..@@...@..
+@#.....@#....
+@@##@.....@..
+.....#.......
+.@#..#.@@.@.@
+if false
+  print 24
+  set printx to isThere 2
+else
+  turn by 4
+  if true
+   turn by 2
+   if printx
+     set a to isThere 2
+     set notfal to printx = a
+     set x to 85
+  else
+   print 56
+set printx to x > 45
+print x
+turn by 1
+if true
+  step forward x
+if notfal
+  step forward 0
+  if arany
+      set x to x
+      set printx to a
+  if a
+      set a to x <= x
+      set megy to isThere 1
+      while megy
+       step forward 0
+       turn by x
+       set megy to isThere 0
+turn by 1
+if a
+    set tox to true = printx
+    turn by x
+    set setx to printx = false
+if tox
+  set iffy to isThere 1
+  set Arany to isThere 0
+  set by1 to 28 >= 6
+else
+  set whilee to 49 * 0
+  set by1 to whilee < x
+  set iffy to not a
+set whilee to 82
+turn by whilee

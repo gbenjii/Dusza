@@ -1,0 +1,62 @@
+5 1
+^
+@
+#
+.
+.
+step forward 1
+step forward 1
+set megy to isThere 0
+while megy
+ set megy to isThere 1
+ while megy
+  set a to 18 * 6
+  set megy to isThere 0
+  while megy
+    step forward a
+    print megy
+    set here2 to not false
+    set megy to isThere 2
+  if false
+    set tox to here2 and false
+    step forward 1
+  else
+    mine here
+  set megy to isThere 2
+ set whilee to a * 8
+ set megy to isThere 1
+ while megy
+   set megy to isThere 1
+   while megy
+     set Arany to 56
+     set tox to here2 or megy
+     step forward 2
+     set megy to isThere 2
+   if here2
+     turn by whilee
+     print whilee
+   else
+     turn by Arany
+     set whilee to a - a
+   set megy to isThere 1
+ set megy to isThere 0
+turn by Arany
+if tox
+    step forward 0
+    if here2
+      step forward 1
+      set megy to isThere 1
+      while megy
+        mine here
+        step forward Arany
+        step forward a
+        set megy to isThere 1
+else
+    turn by whilee
+    set orr to 14 < a
+mine here
+set by1 to not tox
+step forward 0
+step forward 2
+step forward 1
+print Arany

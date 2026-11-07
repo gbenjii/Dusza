@@ -1,0 +1,20 @@
+1 2
+>.
+set a to 0
+set ca to true
+while ca
+  set b to 0
+  set cb to true
+  while cb
+    set d to 0
+    set cd to true
+    while cd
+      set d to d + 1
+      set cd to d < 2
+    set b to b + 1
+    set cb to b < 2
+  set a to a + 1
+  set ca to a < 2
+print a
+print b
+print d

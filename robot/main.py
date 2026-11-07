@@ -84,6 +84,10 @@ def main(argumentumok: list[str]) -> int:
         return 0 if hibas == 0 else 1
     be_utvonal = argumentumok[0] if len(argumentumok) >= 1 else None
     ki_utvonal = argumentumok[1] if len(argumentumok) >= 2 else None
+    # Linuxon Xft nélküli Tk-val (pl. a uv saját Pythonja) a szövegek csúnyák lennének:
+    # ilyenkor a felület a gép Xft-s Pythonjával indul újra (lásd gui/xft_inditas.py).
+    from gui.xft_inditas import ujrainditas_xft_pythonnal
+    ujrainditas_xft_pythonnal(str(Path(__file__).resolve()), argumentumok)
     from gui.foablak import inditas  # csak itt töltjük be: a -q mód így gyors
     inditas(be_utvonal, ki_utvonal)
     return 0

@@ -1,0 +1,12 @@
+1 isThere 1 false
+2
+3
+4 print 66
+5 print 68
+6
+8
+9 turn by 91
+10 turn by 91
+11 isThere 1 false
+12
+EOR

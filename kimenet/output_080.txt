@@ -1,0 +1,6 @@
+1
+2
+3 isThere 1 false
+4
+12 step forward E_UNINITIALIZED
+EOR

@@ -1,0 +1,48 @@
+14 1
+@
+@
+.
+.
+@
+.
+.
+.
+#
+@
+.
+@
+@
+^
+set by1 to 56 * 9
+if true
+    turn by 3
+    step forward 0
+    set fal to isThere 1
+    while fal
+      if fal
+          turn by 4
+          turn by by1
+      set iffy to 83
+      set endif to 100
+      set fal to isThere 1
+else
+    turn by 1
+    set tox to false and fal
+if false
+  set fal to isThere 0
+  while fal
+    set here2 to iffy
+    step forward 1
+    set here2 to 8 * here2
+    set fal to isThere 2
+step forward endif
+step forward iffy
+turn by iffy
+mine here
+if true
+  step forward 2
+else
+  if fal
+    turn by endif
+    mine here
+  set arany to 1

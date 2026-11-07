@@ -1,0 +1,31 @@
+15 15
+>.#....@.#....@
+.#.###.#.#.##.#
+.#...#...#..#..
+.###.#####.#.#.
+.....@...#.#.#.
+####.###.#.#.#.
+...#...#...#.@.
+.#.###.#####.##
+.#.@...#.....#.
+.#####.#.###.#.
+.....#...#.@.#.
+.###.#####.###.
+.#.@.#.....#...
+.#.###.###.#.#.
+...#.....#...#@
+set count to 0
+set fut to true
+while fut
+  turn by 1
+  set fal to isThere 1
+  while fal
+    turn by 3
+    set fal to isThere 1
+  set arany to isThere 2
+  step forward 1
+  if arany
+    mine here
+    set count to count + 1
+  set fut to count < 6
+print count

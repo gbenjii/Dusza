@@ -1,0 +1,46 @@
+14 2
+>#
+..
+#.
+@.
+.@
+..
+@.
+##
+.@
+.@
+.#
+@.
+@#
+@.
+set setx to isThere 2
+set here2 to 55 - 9
+turn by here2
+set here2 to here2 * here2
+if false
+ step forward 1
+else
+ mine here
+ if setx
+   turn by 5
+   step forward here2
+   set whilee to false
+ else
+   step forward 2
+ step forward here2
+turn by 4
+if false
+    step forward 1
+set by1 to whilee or whilee
+if whilee
+ set Arany to 53 - 0
+ step forward Arany
+ if by1
+   step forward Arany
+ else
+   if whilee
+     print here2
+     set orr to not setx
+   else
+     set orr to setx or setx
+     set printx to 5

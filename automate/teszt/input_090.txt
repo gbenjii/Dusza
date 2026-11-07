@@ -1,0 +1,23 @@
+4 11
+..#...#@.>@
+##.@.....#@
+..@.@.#.#.@
+@.##@@#@@@.
+set whilee to isThere 2
+turn by 3
+step forward 1
+set setx to 45 >= 14
+mine here
+set arany to 75
+set arany to isThere 0
+while arany
+  set arany to isThere 2
+  while arany
+      set x to 24
+      step forward arany
+      if whilee
+        set iffy to 98
+        set a to 28 <= 7
+        step forward iffy
+  mine here
+set arany to 83

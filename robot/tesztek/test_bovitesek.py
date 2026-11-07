@@ -12,7 +12,7 @@ from futtato import Futtato, SorElott, Vegallapot
 from main import kimenet_neve, main, mappa_futtatas
 from naplo import Naplo, NaploSor
 from nyelv.elemzo import elemez
-from peldaprogramok import PELDAK
+from peldaprogramok import PELDAK, TERKEP_VIDEO
 from tesztek.segedlet import sorok
 from terkep import Irany, Mezo
 
@@ -118,6 +118,17 @@ class PeldaTeszt(unittest.TestCase):
     def test_aranygyujtes(self):
         self.assertEqual(self.futtat("egyenesen").kimenet, ["4"])
 
+    def test_bemutato_palya_minden_arany(self):
+        futtato = self.futtat("mind a 8 arany")
+        self.assertEqual(futtato.allapot, Vegallapot.RENDBEN)
+        self.assertEqual(futtato.vilag.arany_db, 8)
+        self.assertEqual(futtato.naplo.sorok[-1], "EOR")
+
+    def test_bemutato_terkep_egyezik_az_input_video_fajllal(self):
+        fajl = Path(__file__).resolve().parent.parent / "input_video.txt"
+        terkep = fajl.read_text(encoding="utf-8").splitlines()[:6]
+        self.assertEqual(TERKEP_VIDEO, "".join(sor + "\n" for sor in terkep))
+
     def test_korbejaras(self):
         futtato = self.futtat("Körbejárás")
         self.assertEqual(futtato.allapot, Vegallapot.RENDBEN)
@@ -144,6 +155,11 @@ class VilagBovitesTeszt(unittest.TestCase):
         self.assertEqual((vilag.lepesszam, vilag.fordulasszam), (2, 1))
         self.assertEqual(vilag.kibanyaszott, {(0, 2)})
         self.assertEqual(vilag.osszes_arany(), 1)
+
+    def test_iranyvaltas_nelkuli_fordulas_nem_szamit(self):
+        futtato = futtato_keszit("1 2\n>.\n" + sorok("turn by 0", "turn by 4", "turn by 1", "turn by 3"))
+        futtato.futtat_vegig()
+        self.assertEqual(futtato.vilag.fordulasszam, 2)
 
     def test_reszleges_lepes_utvonala(self):
         futtato = futtato_keszit("1 3\n>..\n" + sorok("step forward 5"))

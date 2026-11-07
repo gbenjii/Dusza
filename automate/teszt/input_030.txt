@@ -1,0 +1,4 @@
+1 2
+>@
+set a to 5
+set a to isThere 2

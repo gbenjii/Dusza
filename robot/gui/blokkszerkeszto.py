@@ -24,6 +24,7 @@ from tkinter import messagebox
 import customtkinter as ctk
 
 from gui import stilus
+from gui.kerekites import kerek_teglalap
 from gui.tooltip import Tooltip
 from nyelv.ellenorzo import azonosito_hiba, ertek_hiba, ertek_leptet, leptetheto_e
 from nyelv.kiiro import fej_szoveg
@@ -210,12 +211,9 @@ class Hely:
     y: float
 
 
-def _kerek(vaszon: tk.Canvas, x0, y0, x1, y1, r=6, **opciok) -> int:
-    """Lekerekített téglalap."""
-    r = min(r, (x1 - x0) / 2, (y1 - y0) / 2)
-    pontok = (x0 + r, y0, x1 - r, y0, x1, y0, x1, y0 + r, x1, y1 - r, x1, y1,
-              x1 - r, y1, x0 + r, y1, x0, y1, x0, y1 - r, x0, y0 + r, x0, y0)
-    return vaszon.create_polygon(pontok, smooth=True, **opciok)
+def _kerek(vaszon: tk.Canvas, x0, y0, x1, y1, r=6, **opciok) -> None:
+    """Lekerekített téglalap élsimított sarkokkal (lásd gui/kerekites.py)."""
+    kerek_teglalap(vaszon, x0, y0, x1, y1, r, **opciok)
 
 
 class Blokkszerkeszto(ctk.CTkFrame):

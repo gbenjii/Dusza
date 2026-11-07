@@ -1,0 +1,37 @@
+6 9
+@@@#.#@##
+#......@#
+...@..###
+.#..##.@.
+..@#@.#@@
+.#@#@###>
+if true
+    mine here
+else
+    set setx to 82 >= 51
+    turn by 0
+set megy to isThere 1
+while megy
+    mine here
+    mine here
+    set megy to isThere 1
+set printx to megy
+set printx to megy
+if setx
+    set x to 96
+    set arany to isThere 0
+    while arany
+        set by1 to isThere 2
+        turn by x
+        set arany to isThere 0
+step forward 0
+if arany
+    mine here
+else
+    step forward 1
+    set x to x
+    mine here
+step forward x
+set notfal to isThere 2
+set iffy to not setx
+turn by x

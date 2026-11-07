@@ -1,0 +1,7 @@
+1
+4
+5 turn by 4
+6
+7 turn by 2
+8 E_UNINITIALIZED
+EOR

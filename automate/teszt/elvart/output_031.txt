@@ -1,0 +1,6 @@
+1
+2
+3
+4 print true
+5 E_TYPE_MISMATCH
+EOR

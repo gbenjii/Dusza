@@ -15,6 +15,7 @@ from collections.abc import Callable
 import customtkinter as ctk
 
 from gui import stilus
+from gui.folyo_keret import FolyoKeret
 from gui.tooltip import Tooltip
 from terkep import Irany, Mezo, Vilag
 
@@ -85,11 +86,13 @@ class SzimulatorNezet(ctk.CTkFrame):
         self._fejlec()
         self._informacios_sor()
         self._szerkeszto_sav()
+        # Az alsó sávok alulról kerülnek be, a térkép előtt: alacsony ablakban így a térkép
+        # zsugorodik, nem a kézi vezérlés gombjai tűnnek el.
+        self._kezi_vezerles()
+        self._jelmagyarazat()
         self.vaszon = tk.Canvas(self, background=stilus.PANEL, highlightthickness=0, height=260)
         self.vaszon.pack(fill="both", expand=True, padx=10, pady=4)
         self._vaszon_kotesek()
-        self._jelmagyarazat()
-        self._kezi_vezerles()
 
     # ---------- Felépítés ----------
 
@@ -106,9 +109,9 @@ class SzimulatorNezet(ctk.CTkFrame):
         Tooltip(self.szerkeszto_gomb, "Térképszerkesztő mód: falak, aranyrögök és a robot elhelyezése, "
                 "a térkép átméretezése (1–15). A Mentés a térképet is elmenti.")
 
-    def _kartya(self, szulo, cim: str) -> ctk.CTkLabel:
+    def _kartya(self, szulo: FolyoKeret, cim: str) -> ctk.CTkLabel:
         keret = ctk.CTkFrame(szulo, fg_color="#f1f5f9", corner_radius=8)
-        keret.pack(side="left", fill="both", expand=True, padx=3)
+        szulo.hozzaad(keret)
         ctk.CTkLabel(keret, text=cim, font=stilus.betu(10), text_color=stilus.HALVANY,
                      height=16).pack(anchor="w", padx=8, pady=(4, 0))
         ertek = ctk.CTkLabel(keret, text="–", font=stilus.betu(13, True), text_color=stilus.SZOVEG,
@@ -117,8 +120,9 @@ class SzimulatorNezet(ctk.CTkFrame):
         return ertek
 
     def _informacios_sor(self) -> None:
-        sor = ctk.CTkFrame(self, fg_color="transparent")
-        sor.pack(fill="x", padx=8, pady=(6, 0))
+        # Sortörő, egyforma széles kártyák: keskeny panelen két sorba törnek, nem vágódnak le.
+        sor = FolyoKeret(self, hatter=stilus.PANEL, vizszintes_koz=6, fuggoleges_koz=6, kitolt=True)
+        sor.pack(fill="x", padx=11, pady=(6, 0))
         self.arany_cimke = self._kartya(sor, "Kibányászott arany")
         self.szenzor_cimke = self._kartya(sor, "Szenzor (a robot előtt)")
         self.irany_cimke = self._kartya(sor, "Helyzet / irány")
@@ -143,15 +147,18 @@ class SzimulatorNezet(ctk.CTkFrame):
                       fg_color=SZIN_SZERKESZTO, hover_color="#6d28d9",
                       command=self._szerkeszto_kapcsol).pack(side="right", padx=2)
         also = ctk.CTkFrame(self._szerk_sav, fg_color="transparent")
-        also.pack(fill="x", padx=6, pady=(0, 6))
+        also.pack(fill="x", padx=6, pady=(0, 2))
         ctk.CTkLabel(also, text="Méret:", font=stilus.betu(11, True),
                      text_color=SZIN_SZERKESZTO).pack(side="left", padx=(2, 4))
         for felirat, dsor, doszlop in (("Sor −", -1, 0), ("Sor +", 1, 0), ("Oszlop −", 0, -1), ("Oszlop +", 0, 1)):
             ctk.CTkButton(also, text=felirat, width=10, height=24, font=stilus.betu(10),
                           fg_color="#ddd6fe", text_color="#4c1d95", hover_color="#c4b5fd",
                           command=lambda s=dsor, o=doszlop: self._meret_valt(s, o)).pack(side="left", padx=2)
-        ctk.CTkLabel(also, text="kattints / húzz a térképen; Robot: áthelyezés, rajta kattintva fordul",
-                     font=stilus.betu(10), text_color=stilus.HALVANY).pack(side="left", padx=8)
+        tipp = ctk.CTkLabel(self._szerk_sav, text="Kattints / húzz a térképen. Robot eszköz: áthelyezés, "
+                                                  "a robotra kattintva fordul.",
+                            font=stilus.betu(10), text_color=stilus.HALVANY, justify="left")
+        tipp.pack(anchor="w", padx=10, pady=(0, 6))
+        stilus.tordel(tipp, self._szerk_sav)
 
     def _vaszon_kotesek(self) -> None:
         v = self.vaszon
@@ -166,13 +173,15 @@ class SzimulatorNezet(ctk.CTkFrame):
 
     def _kezi_vezerles(self) -> None:
         keret = ctk.CTkFrame(self, fg_color="#f1f5f9", corner_radius=8)
-        keret.pack(fill="x", padx=10, pady=(4, 10))
+        keret.pack(side="bottom", fill="x", padx=10, pady=(4, 10))
         cim = ctk.CTkLabel(keret, text="Kézi vezérlés  (megszakítja a futást, nem naplóz; "
                                        "a térképre kattintva: ← ↑ → és szóköz)",
-                           font=stilus.betu(10), text_color=stilus.HALVANY)
+                           font=stilus.betu(10), text_color=stilus.HALVANY, justify="left")
         cim.pack(anchor="w", padx=8, pady=(4, 0))
-        gombsor = ctk.CTkFrame(keret, fg_color="transparent")
-        gombsor.pack(fill="x", padx=6, pady=(2, 6))
+        stilus.tordel(cim, keret)
+        # Sortörő gombsor: keskeny panelen a gombok két sorba kerülnek, nem vágódnak le.
+        gombsor = FolyoKeret(keret, hatter="#f1f5f9", vizszintes_koz=4, fuggoleges_koz=4, kitolt=True)
+        gombsor.pack(fill="x", padx=8, pady=(2, 8))
         for felirat, parancs, sugo in KEZI_PARANCSOK:
             szin = stilus.GOMB_SEMLEGES if parancs == "alaphelyzet" else ("#0f766e", "#115e59")
             if parancs == "banyasz":
@@ -180,30 +189,33 @@ class SzimulatorNezet(ctk.CTkFrame):
             gomb = ctk.CTkButton(gombsor, text=felirat, width=40, height=32, font=stilus.betu(11, True),
                                  fg_color=szin[0], hover_color=szin[1],
                                  command=lambda p=parancs: self._kezi_parancs(p))
-            gomb.pack(side="left", padx=2, fill="x", expand=True)
+            gombsor.hozzaad(gomb)
             Tooltip(gomb, sugo)
 
     def _jelmagyarazat(self) -> None:
-        keret = ctk.CTkFrame(self, fg_color="transparent")
-        keret.pack(fill="x", padx=12)
+        """Színminta + felirat párok sortörő sorban (keskeny panelen sem vágódik le a vége)."""
+        keret = FolyoKeret(self, hatter=stilus.PANEL, vizszintes_koz=12, fuggoleges_koz=2)
+        keret.pack(side="bottom", fill="x", padx=12)
+
+        def elem(felirat: str, **minta) -> ctk.CTkLabel:
+            par = tk.Frame(keret, background=stilus.PANEL)
+            ctk.CTkFrame(par, width=14, height=14, **minta).pack(side="left")
+            cimke = ctk.CTkLabel(par, text=felirat, font=stilus.betu(10), text_color=stilus.HALVANY,
+                                 height=18)
+            cimke.pack(side="left", padx=(4, 0))
+            keret.hozzaad(par)
+            return cimke
+
         elemek = ((SZIN_URES, "felfedezett"), (SZIN_ISMERETLEN, "feltérképezetlen"),
                   (SZIN_FAL, "fal"), (SZIN_ARANY, "arany"), (SZIN_ROBOT, "robot"), (SZIN_NYOM, "nyomvonal"))
         for szin, felirat in elemek:
-            ctk.CTkFrame(keret, fg_color=szin, width=14, height=14, corner_radius=3,
-                         border_width=1, border_color="#94a3b8").pack(side="left")
-            cimke = ctk.CTkLabel(keret, text=f" {felirat}  ", font=stilus.betu(10),
-                                 text_color=stilus.HALVANY)
-            cimke.pack(side="left")
+            cimke = elem(felirat, fg_color=szin, corner_radius=3, border_width=1, border_color="#94a3b8")
             if felirat == "felfedezett":
                 self.felfedezett_cimke = cimke
-        ctk.CTkFrame(keret, fg_color="transparent", width=14, height=14, corner_radius=3,
-                     border_width=2, border_color=SZENZOR_KERET[Mezo.URES]).pack(side="left")
-        ctk.CTkLabel(keret, text=" szenzor  ", font=stilus.betu(10),
-                     text_color=stilus.HALVANY).pack(side="left")
-        ctk.CTkFrame(keret, fg_color="transparent", width=14, height=14, corner_radius=7,
-                     border_width=2, border_color=SZIN_KIBANYASZOTT).pack(side="left")
-        ctk.CTkLabel(keret, text=" kibányászva", font=stilus.betu(10),
-                     text_color=stilus.HALVANY).pack(side="left")
+        elem("szenzor", fg_color="transparent", corner_radius=3, border_width=2,
+             border_color=SZENZOR_KERET[Mezo.URES])
+        elem("kibányászva", fg_color="transparent", corner_radius=7, border_width=2,
+             border_color=SZIN_KIBANYASZOTT)
 
     # ---------- Térképszerkesztő mód ----------
 
@@ -530,4 +542,4 @@ class SzimulatorNezet(ctk.CTkFrame):
                                         f"{robot.irany.nev} {IRANY_NYIL[robot.irany]}")
         terulet = vilag.terkep.sorok * vilag.terkep.oszlopok
         self.stat_cimke.configure(text=f"{vilag.lepesszam} lépés · {vilag.fordulasszam} fordulás")
-        self.felfedezett_cimke.configure(text=f" felfedezett ({len(vilag.felfedezett)}/{terulet})  ")
+        self.felfedezett_cimke.configure(text=f"felfedezett ({len(vilag.felfedezett)}/{terulet})")

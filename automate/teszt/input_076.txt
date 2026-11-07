@@ -1,0 +1,30 @@
+14 3
+...
+.#.
+@>.
+...
+@#.
+.#.
+#..
+..#
+..#
+.#.
+...
+..#
+#@.
+...
+if true
+    step forward 0
+    set whilee to not true
+    set printx to 26 * 4
+else
+    set iffy to printx + printx
+    turn by 5
+set Arany to not whilee
+set whilee to isThere 0
+if Arany
+  step forward printx
+  print iffy
+  turn by printx
+mine here
+step forward printx

@@ -1,0 +1,26 @@
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10 isThere 0 true
+11
+12
+13
+14
+15 print 3
+16 print 9
+17 print false
+18 print true
+19 print 8
+20 print true
+21 print true
+22 print true
+23 step forward 0
+24 turn by 2
+25 print 2
+EOR

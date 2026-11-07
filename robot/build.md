@@ -20,20 +20,35 @@
 
 ## Linux: betűtípusok és a uv
 A felület csak akkor néz ki jól Linuxon, ha a Python Tk-ja **Xft**-vel készült,
-mert csak így látja a rendszer betűtípusait (DejaVu, Noto, Ubuntu).
+mert csak így látja a rendszer betűtípusait (DejaVu, Noto, Ubuntu), élsimítással.
 - A rendszer Pythonja (`/usr/bin/python3` + `python3-tk` csomag): Tk 8.6, xft – **jó**.
 - A uv által letöltött Python (python-build-standalone): Tk 9.0, Xft nélkül – csak
-  régi X11-betűk, élsimítás nélkül, egyes jelek helyén négyzet. Ilyenkor a program
-  a legjobb X11-betűre vált, és figyelmeztet az állapotsorban.
+  régi X11-betűk: élsimítás nélkül, hiányzó jelek, rosszul méretezett, egymásra csúszó feliratok.
 
-Ezért a `Dusza/pyproject.toml` beállítása `python-preference = "only-system"`, és a
-`.python-version` értéke `3.13`. Így a uv a gépre telepített Pythonból készíti a `.venv`-et:
-```
-uv sync
-uv run python program/robot/main.py program/robot/input_video.txt output_video.txt
-```
-Ellenőrzés: `uv run python -c "import tkinter as t; print(t.Tk().tk.call('::tk::pkgconfig','get','fontsystem'))"` → `xft`.
-Windowson ez a gond nem jelentkezik, ott a Tk a Windows saját betűkezelését használja.
+**Automatikus megoldás** (`gui/xft_inditas.py`): ha a felületet Xft nélküli Tk-jú Pythonnal
+indítják (pl. `uv run python robot/main.py …`), a program megkeresi a gép Xft-s Pythonját
+(`/usr/bin/python3` stb.), és a felületet azzal indítja újra. A customtkinter-t a uv-s
+környezetből kapja (`PYTHONPATH`), így a rendszer-Pythonra semmit nem kell telepíteni,
+csak a `python3-tk` csomag kell (`sudo apt install python3-tk`). A konzolra kiírja, melyik
+Pythonnal indult. A `-q` és `-m` mód, a Windows és a lefordított exe nem érintett.
+Kikapcsolás: `ROBOT_NINCS_UJRAINDITAS=1`.
+
+Ha a gépen nincs Xft-s Python, a felület a mostani Pythonnal indul: a legjobb régi
+X11-betűre vált (helvetica / courier, legalább 11 px), és az állapotsorban figyelmeztet.
+
+Elrendezés: az eszközsor, a szimulátor kártyái, a jelmagyarázat és a kézi vezérlés gombjai
+sortörők (`gui/folyo_keret.py`): keskeny ablakban új sorba kerülnek, nem vágódnak le.
+A hosszú feliratok a panel szélességéhez igazodva tördelnek (`stilus.tordel`).
+
+Lekerekítések:
+- A customtkinter Linuxon a gombok / keretek sarkait egy saját betűtípussal rajzolja.
+  Xft nélküli Tk-n ez szétesik (recés pixelminta), ezért ilyenkor a program automatikusan
+  a sokszögből rajzolt sarkokra vált (`gui/stilus.py`).
+- A blokkszerkesztő vásznán a blokkok, mezők sarkai élsimított, átlátszó PNG-sarokképek
+  (`gui/kerekites.py`, csak standard könyvtár), mert a Tk vászon maga nem simít élt.
+  Ez mindkét Pythonnal és Windowson is ugyanígy működik.
+
+Windowson a betűkkel nincs gond, ott a Tk a Windows saját betűkezelését használja.
 
 ## Futtatás forrásból (a `robot` mappában)
 ```
@@ -89,8 +104,12 @@ nyelv/ellenorzo.py    azonosító- és értékellenőrzés (szerkesztőhöz)
 nyelv/szerkesztes.py  beszúrás, áthelyezés (húzás), törlés, else-ág, mélységkorlát (GUI nélkül, tesztelhető)
 gui/                  foablak (futtatás, töréspontok, fájlok, példák), blokkszerkeszto (paletta,
                       húzás, mezők), kodnezet (színezés, töréspontok), szimulator_nezet
-                      (animáció, térképszerkesztő), stilus (betűtípusok, színek), tooltip
+                      (animáció, térképszerkesztő), stilus (betűtípusok, színek), kerekites (élsimított sarkok), folyo_keret (sortörő elrendezés),
+                      xft_inditas (Linux: újraindítás Xft-s Tk-val), tooltip
 tesztek/              unittest tesztek
 peldak/               példa bemenetek (001: a feladat példája, 002: bemutató, 003: limit)
 input_video.txt       a bemutató térképe üres programmal
 ```
+
+# Tesztelés linuxon:
+  - `python3 automate/futtat.py automate/teszt kimenet --elvart automate/teszt/elvart`

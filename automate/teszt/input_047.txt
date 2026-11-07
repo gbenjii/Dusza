@@ -1,0 +1,7 @@
+1 5
+>...#
+step forward 3
+step forward 0
+set a to isThere 1
+print a
+step forward 1

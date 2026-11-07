@@ -1,0 +1,39 @@
+5 9
+....>....
+........@
+.@...@.@.
+@..@@..#@
+...@#...@
+set fal to isThere 2
+while fal
+  if true
+    set by1 to true <> fal
+  set setx to 100
+  set fal to isThere 1
+if false
+    set fal to isThere 1
+    while fal
+      step forward setx
+      set here2 to 55 * setx
+      set fal to isThere 0
+else
+    print true
+    set printx to isThere 1
+    if false
+      step forward 2
+      if false
+          turn by here2
+          step forward 2
+          set arany to 72 > 66
+      else
+          set x to setx
+          set a to true
+          turn by x
+if fal
+  mine here
+  mine here
+set by1 to printx
+step forward 0
+if false
+  set x to 22
+set orr to 74 <= x

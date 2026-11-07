@@ -1,0 +1,42 @@
+13 14
+#.@.@........@
+@........#...@
+....@.@......@
+....#.......#.
+###......@..@.
+...#.......#..
+.@...@@...@..#
+.........@...^
+.....@.......@
+.....@...@....
+..@@..@@..#...
+..............
+..............
+set printx to 51 >= 96
+turn by 0
+set printx to printx and false
+set megy to isThere 1
+while megy
+ set tox to megy and printx
+ set arany to 30
+ set printx to 87 <= arany
+ set megy to isThere 1
+set by1 to arany + 2
+print 84
+set arany to isThere 2
+while arany
+    if megy
+        turn by 4
+        turn by 1
+    else
+        step forward arany
+        set fal to isThere 2
+        while fal
+         set orr to by1 + 0
+         step forward 2
+         set fal to isThere 2
+        set arany to isThere 1
+        while arany
+          step forward 1
+turn by arany
+set endif to orr <= 67

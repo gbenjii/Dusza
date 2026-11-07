@@ -76,9 +76,11 @@ class Kodnezet(ctk.CTkFrame):
                               text_color=stilus.SZOVEG, hover_color="#e2e8f0", command=self._masolas)
         masol.pack(side="right")
         Tooltip(masol, "A teljes forráskód vágólapra másolása.")
-        ctk.CTkLabel(self, text="csak olvasható – a blokkokkal együtt változik.  Sorszámra kattintás: "
-                                "töréspont (●), a futás ott megáll.", font=stilus.betu(10),
-                     text_color=stilus.HALVANY, justify="left", wraplength=330).pack(anchor="w", padx=12)
+        alcim = ctk.CTkLabel(self, text="csak olvasható – a blokkokkal együtt változik.  Sorszámra "
+                                        "kattintás: töréspont (●), a futás ott megáll.", font=stilus.betu(10),
+                             text_color=stilus.HALVANY, justify="left", wraplength=330)
+        alcim.pack(anchor="w", padx=12)
+        stilus.tordel(alcim, self)
 
     # ---------- Megjelenítés ----------
 

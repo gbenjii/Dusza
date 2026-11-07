@@ -1,0 +1,32 @@
+5 12
+.#.....#...#
+............
+..#.......#.
+....#....##.
+...#...>....
+mine here
+step forward 2
+step forward 2
+set printx to 21
+mine here
+set endif to true
+set setx to endif
+set setx to true and false
+if setx
+ step forward 2
+ print false
+if endif
+    turn by printx
+    mine here
+else
+    set here2 to x
+    if false
+        step forward 0
+        if endif
+          step forward true
+          set whilee to 64
+          turn by 1
+        else
+          print printx
+          turn by 3
+        set printx to printx * 4

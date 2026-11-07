@@ -1,0 +1,7 @@
+1 print true
+2 print false
+3 print 0
+4 isThere 0 false
+5 isThere 1 true
+6 isThere 2 false
+EOR

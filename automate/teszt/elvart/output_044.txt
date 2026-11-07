@@ -1,0 +1,15 @@
+1 isThere 1 true
+2 print true
+3 turn by 1
+4 isThere 1 true
+5 print true
+6 turn by 1
+7 isThere 2 true
+8 print true
+9 turn by 1
+10 isThere 2 true
+11 print true
+12 turn by 99
+13 isThere 2 true
+14 print true
+EOR

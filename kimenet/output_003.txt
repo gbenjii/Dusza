@@ -1,0 +1,4 @@
+1 step forward 1
+2 isThere 2 true
+3 print true
+EOR

@@ -1,0 +1,13 @@
+1 2
+>.
+set n to 0
+set megy to true
+while megy
+ set n to n + 1
+ set k to n = 2
+ if k
+    print n
+ else
+       print 0
+ set megy to n < 3
+print n

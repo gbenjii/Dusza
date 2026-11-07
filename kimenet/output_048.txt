@@ -1,0 +1,9 @@
+1 step forward 14
+2 mine here
+3 turn by 2
+4 isThere 2 true
+5 print true
+6 step forward 13
+7 mine here
+8 step forward 1
+EOR

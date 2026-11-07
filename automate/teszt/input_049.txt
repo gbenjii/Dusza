@@ -1,0 +1,28 @@
+15 1
+v
+@
+.
+@
+@
+.
+.
+@
+.
+.
+.
+@
+.
+.
+@
+set n to 0
+set fut to true
+while fut
+  set van to isThere 2
+  step forward 1
+  if van
+    mine here
+    set n to n + 1
+  set fal to isThere 1
+  set fut to not fal
+print n
+step forward 1

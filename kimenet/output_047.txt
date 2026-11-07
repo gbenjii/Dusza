@@ -1,0 +1,6 @@
+1 step forward 3
+2 step forward 0
+3 isThere 1 true
+4 print true
+5 step forward 1 E_BEDROCK_HIT
+EOR

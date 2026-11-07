@@ -1,0 +1,10 @@
+1 15
+>@@@@@@@@@@@@@@
+step forward 14
+mine here
+turn by 2
+set a to isThere 2
+print a
+step forward 13
+mine here
+step forward 1

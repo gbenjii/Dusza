@@ -1,0 +1,5 @@
+1 2
+>.
+set a to 1
+set b to a and true
+print a

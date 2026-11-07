@@ -1,0 +1,18 @@
+3 3
+...
+..@
+.@v
+set a to isThere 1
+print a
+turn by 1
+set b to isThere 1
+print b
+turn by 1
+set c to isThere 2
+print c
+turn by 1
+set d to isThere 2
+print d
+turn by 99
+set e to isThere 2
+print e

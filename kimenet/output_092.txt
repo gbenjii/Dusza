@@ -1,0 +1,8 @@
+1 isThere 2 false
+2
+3 turn by 46
+4
+5
+7
+8 mine here E_NO_GOLD
+EOR
